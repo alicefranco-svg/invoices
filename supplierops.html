@@ -375,6 +375,32 @@ details.dwr-sec[open] summary{border-bottom:1px solid var(--border);background:v
 .nc-chk-label{font-size:13px;color:var(--text-1);cursor:pointer;user-select:none}
 .nc-ft{padding:14px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-shrink:0;background:var(--surface-2)}
 .nc-err{color:var(--red);font-size:12px;flex:1;padding-right:12px;line-height:1.4}
+
+/* ─── DRAWER EDIT FORM ────────────────── */
+.dwr-edit-box{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;margin-bottom:14px}
+.dwr-edit-title{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.dwr-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dwr-edit-field{display:flex;flex-direction:column;gap:4px}
+.dwr-edit-field.span2{grid-column:1/-1}
+.dwr-edit-label{font-size:10.5px;font-weight:600;color:var(--text-2)}
+.dwr-edit-input,.dwr-edit-select{height:30px;padding:0 8px;border:1px solid var(--border-strong);border-radius:var(--r-md);background:var(--bg);color:var(--text-1);font-size:12.5px;font-family:inherit;outline:none;width:100%;transition:border .12s}
+.dwr-edit-select{padding-right:24px;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238896A9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center}
+.dwr-edit-input:focus,.dwr-edit-select:focus{border-color:var(--accent)}
+.dwr-edit-input[type=date]{color-scheme:light dark}
+.dwr-edit-input[type=number]{font-variant-numeric:tabular-nums}
+.dwr-edit-textarea{padding:7px 8px;border:1px solid var(--border-strong);border-radius:var(--r-md);background:var(--bg);color:var(--text-1);font-size:12.5px;font-family:inherit;outline:none;resize:vertical;min-height:60px;width:100%;line-height:1.5;transition:border .12s}
+.dwr-edit-textarea:focus{border-color:var(--accent)}
+
+/* ─── KANBAN DND ──────────────────────── */
+.kanban-card[draggable]{cursor:grab;user-select:none}
+.kanban-card[draggable]:active{cursor:grabbing}
+.kanban-card.dnd-dragging{opacity:.35;transform:rotate(1.5deg);box-shadow:var(--sh-lg)}
+.kanban-col.dnd-over .kanban-cards{outline:2px dashed var(--accent-border);outline-offset:-3px;background:var(--accent-soft)}
+
+/* ─── TOAST ───────────────────────────── */
+#app-toast{position:fixed;bottom:24px;right:24px;padding:10px 16px;border-radius:var(--r-md);font-size:12.5px;z-index:500;box-shadow:var(--sh-lg);display:none;max-width:340px;line-height:1.4}
+#app-toast.toast-err{background:var(--red-bg);border:1px solid var(--red-bd);color:var(--red-txt)}
+#app-toast.toast-ok{background:var(--green-bg);border:1px solid var(--green-bd);color:var(--green-txt)}
 </style>
 
 <!-- ───────────────── APP SHELL ───────────────── -->
@@ -458,22 +484,8 @@ details.dwr-sec[open] summary{border-bottom:1px solid var(--border);background:v
             <input class="nc-input" id="nc-area" type="text" placeholder="ex: Financeiro, RH, TI">
           </div>
           <div class="nc-field">
-            <label class="nc-label" for="nc-contract-type">Tipo de Contratação</label>
-            <select class="nc-select" id="nc-contract-type">
-              <option value="novo_contrato">Novo Contrato</option>
-              <option value="aditivo">Aditivo</option>
-              <option value="renovacao">Renovação</option>
-              <option value="po_simplificado">PO / Simplificado</option>
-              <option value="sem_contrato">Sem Contrato</option>
-            </select>
-          </div>
-          <div class="nc-field">
-            <label class="nc-label" for="nc-business-owner">Business Owner</label>
-            <input class="nc-input" id="nc-business-owner" type="text" placeholder="Nome do responsável de negócio">
-          </div>
-          <div class="nc-field">
-            <label class="nc-label" for="nc-internal-owner">Responsável Interno</label>
-            <input class="nc-input" id="nc-internal-owner" type="text" placeholder="Nome do gestor interno">
+            <label class="nc-label" for="nc-business-owner">Responsável pelo orçamento<span class="req">*</span></label>
+            <input class="nc-input" id="nc-business-owner" type="text" placeholder="Nome do responsável">
           </div>
           <div class="nc-field">
             <div class="nc-chk-row">
@@ -483,15 +495,15 @@ details.dwr-sec[open] summary{border-bottom:1px solid var(--border);background:v
           </div>
           <div class="nc-field">
             <div class="nc-chk-row">
-              <input type="checkbox" id="nc-new-supplier" onchange="ncToggleRegistration()">
+              <input type="checkbox" id="nc-new-supplier">
               <label class="nc-chk-label" for="nc-new-supplier">Novo Fornecedor</label>
             </div>
           </div>
         </div>
       </div>
-      <!-- Bloco 2: Homologação / Contrato -->
+      <!-- Bloco 2: Processo -->
       <div class="nc-section">
-        <div class="nc-section-title">Homologação / Contrato</div>
+        <div class="nc-section-title">Processo</div>
         <div class="nc-grid">
           <div class="nc-field">
             <label class="nc-label" for="nc-hom-status">Status Homologação</label>
@@ -524,10 +536,6 @@ details.dwr-sec[open] summary{border-bottom:1px solid var(--border);background:v
             </select>
           </div>
           <div class="nc-field">
-            <label class="nc-label" for="nc-contract-end">Vencimento Contrato</label>
-            <input class="nc-input" id="nc-contract-end" type="date">
-          </div>
-          <div class="nc-field">
             <label class="nc-label" for="nc-contract-value">Valor Contratado</label>
             <input class="nc-input" id="nc-contract-value" type="number" min="0" step="0.01" placeholder="0">
           </div>
@@ -539,27 +547,19 @@ details.dwr-sec[open] summary{border-bottom:1px solid var(--border);background:v
               <option value="EUR">EUR — Euro</option>
             </select>
           </div>
-          <div class="nc-field" id="nc-registration-wrap" style="display:none">
-            <div class="nc-chk-row">
-              <input type="checkbox" id="nc-registration-required">
-              <label class="nc-chk-label" for="nc-registration-required">Cadastro Necessário</label>
-            </div>
-          </div>
         </div>
       </div>
       <!-- Bloco 3: Operação -->
       <div class="nc-section">
         <div class="nc-section-title">Operação</div>
         <div class="nc-grid">
+          <div class="nc-field span2">
+            <label class="nc-label" for="nc-next-action">Próxima Ação<span class="req">*</span></label>
+            <input class="nc-input" id="nc-next-action" type="text" placeholder="Descreva a próxima ação necessária">
+          </div>
           <div class="nc-field">
-            <label class="nc-label" for="nc-macro">Macroetapa<span class="req">*</span></label>
-            <select class="nc-select" id="nc-macro">
-              <option value="homologacao">Homologação</option>
-              <option value="contratacao">Contratação</option>
-              <option value="prestacao_servico">Prestação do Serviço</option>
-              <option value="faturamento">Faturamento</option>
-              <option value="pagamento">Pagamento</option>
-            </select>
+            <label class="nc-label" for="nc-action-date">Data Próxima Ação</label>
+            <input class="nc-input" id="nc-action-date" type="date">
           </div>
           <div class="nc-field">
             <label class="nc-label" for="nc-priority">Prioridade</label>
@@ -569,22 +569,6 @@ details.dwr-sec[open] summary{border-bottom:1px solid var(--border);background:v
               <option value="alta">Alta</option>
               <option value="urgente">Urgente</option>
             </select>
-          </div>
-          <div class="nc-field span2">
-            <label class="nc-label" for="nc-next-action">Próxima Ação<span class="req">*</span></label>
-            <input class="nc-input" id="nc-next-action" type="text" placeholder="Descreva a próxima ação necessária">
-          </div>
-          <div class="nc-field">
-            <label class="nc-label" for="nc-action-owner">Responsável pela Ação</label>
-            <input class="nc-input" id="nc-action-owner" type="text" placeholder="Nome do responsável">
-          </div>
-          <div class="nc-field">
-            <label class="nc-label" for="nc-action-date">Data Próxima Ação</label>
-            <input class="nc-input" id="nc-action-date" type="date">
-          </div>
-          <div class="nc-field span2">
-            <label class="nc-label" for="nc-dependency">Dependência</label>
-            <input class="nc-input" id="nc-dependency" type="text" placeholder="ex: Área de Compras, Jurídico">
           </div>
           <div class="nc-field span2">
             <label class="nc-label" for="nc-notes">Observações</label>
@@ -600,6 +584,8 @@ details.dwr-sec[open] summary{border-bottom:1px solid var(--border);background:v
     </div>
   </div>
 </div>
+
+<div id="app-toast"></div>
 
 <div id="overlay" onclick="closeDrawer()"></div>
 <div id="drawer">
@@ -1314,6 +1300,9 @@ function sortActions(rs){
    STATE
 ═══════════════════════════════════════════ */
 const STATE = { page:'overview', view:'operacional' };
+let CURRENT_DRAWER_ID = null;
+let DND_DRAGGING_ID = null;
+let DND_DRAGGING_FROM = null;
 const PIPE_FILTERS = { search:'', area:'', owner:'', priority:'', overdueOnly:false, newSupplier:false };
 const BILL_FILTERS = { month:'' };
 const MACRO_ORDER = ['homologacao','contratacao','prestacao_servico','faturamento','pagamento'];
@@ -1351,7 +1340,7 @@ function render(){
   const el = document.getElementById('page');
   switch(STATE.page){
     case 'overview':  el.innerHTML = renderOverview(); break;
-    case 'pipeline':  el.innerHTML = renderPipeline(); break;
+    case 'pipeline':  el.innerHTML = renderPipeline(); initDragDrop(); break;
     case 'billing':   el.innerHTML = renderBilling(); break;
     case 'renewals':  el.innerHTML = renderRenewals(); break;
     default: el.innerHTML = '';
@@ -1376,7 +1365,101 @@ function infoBox(label,icon,rows){
   return `<div class="info-box"><div class="info-box-lbl">${icon?'<span>'+icon+'</span> ':''}<span>${label}</span></div><div class="dl-grid">${rows}</div></div>`;
 }
 
+function buildDrawerEditForm(r){
+  function opt(val, label, sel){ return `<option value="${val}"${sel===val?' selected':''}>${label}</option>`; }
+  const homOpts = [
+    ['nao_iniciada','Não iniciada'],['aguardando_documentos','Aguardando documentos'],
+    ['em_analise','Em análise'],['aguardando_fornecedor','Aguardando fornecedor'],
+    ['homologacao_concluida','Homologação concluída'],['bloqueada','Bloqueada'],['reprovada','Reprovada']
+  ].map(([v,l])=>opt(v,l,r.homologationStatus)).join('');
+  const contOpts = [
+    ['nao_necessario','Não necessário'],['solicitacao_pendente','Solicitação pendente'],
+    ['contrato_solicitado','Contrato solicitado'],['em_elaboracao','Em elaboração'],
+    ['em_negociacao','Em negociação'],['aguardando_assinatura_interna','Ag. assinatura interna'],
+    ['aguardando_assinatura_fornecedor','Ag. assinatura fornecedor'],
+    ['assinatura_concluida','Assinado'],['bloqueado','Bloqueado']
+  ].map(([v,l])=>opt(v,l,r.contractStatus)).join('');
+  const cadOpts = [
+    ['nao_iniciado','Não iniciado'],['cadastro_em_andamento','Em andamento'],['cadastro_concluido','Concluído']
+  ].map(([v,l])=>opt(v,l,r.supplierRegistrationStatus)).join('');
+  const prioOpts = [
+    ['baixa','Baixa'],['media','Média'],['alta','Alta'],['urgente','Urgente']
+  ].map(([v,l])=>opt(v,l,r.priority)).join('');
+  return `
+  <div class="dwr-edit-box">
+    <div class="dwr-edit-title">Atualizar Processo</div>
+    <div class="dwr-edit-grid">
+      <div class="dwr-edit-field">
+        <label class="dwr-edit-label">Status Homologação</label>
+        <select class="dwr-edit-select" id="de-hom-status">${homOpts}</select>
+      </div>
+      <div class="dwr-edit-field">
+        <label class="dwr-edit-label">Status Contrato</label>
+        <select class="dwr-edit-select" id="de-contract-status">${contOpts}</select>
+      </div>
+      <div class="dwr-edit-field">
+        <label class="dwr-edit-label">Status Cadastro</label>
+        <select class="dwr-edit-select" id="de-cad-status">${cadOpts}</select>
+      </div>
+      <div class="dwr-edit-field">
+        <label class="dwr-edit-label">Prioridade</label>
+        <select class="dwr-edit-select" id="de-priority">${prioOpts}</select>
+      </div>
+      <div class="dwr-edit-field span2">
+        <label class="dwr-edit-label">Próxima Ação</label>
+        <input class="dwr-edit-input" id="de-next-action" type="text" value="${esc(r.nextAction||'')}">
+      </div>
+      <div class="dwr-edit-field">
+        <label class="dwr-edit-label">Responsável pela Ação</label>
+        <input class="dwr-edit-input" id="de-action-owner" type="text" value="${esc(r.actionOwner||'')}">
+      </div>
+      <div class="dwr-edit-field">
+        <label class="dwr-edit-label">Data Próxima Ação</label>
+        <input class="dwr-edit-input" id="de-action-date" type="date" value="${r.nextActionDate||''}">
+      </div>
+      <div class="dwr-edit-field">
+        <label class="dwr-edit-label">Valor Contratado</label>
+        <input class="dwr-edit-input" id="de-contract-value" type="number" min="0" step="0.01" value="${r.contractValue||''}">
+      </div>
+      <div class="dwr-edit-field">
+        <label class="dwr-edit-label">Vencimento Contrato</label>
+        <input class="dwr-edit-input" id="de-contract-end" type="date" value="${r.contractEndDate||''}">
+      </div>
+      <div class="dwr-edit-field span2">
+        <label class="dwr-edit-label">Observações</label>
+        <textarea class="dwr-edit-textarea" id="de-notes">${esc(r.notes||'')}</textarea>
+      </div>
+    </div>
+    <details style="margin-top:12px">
+      <summary style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);cursor:pointer;list-style:none;padding:4px 0">▸ Dados da Contratação</summary>
+      <div class="dwr-edit-grid" style="margin-top:10px">
+        <div class="dwr-edit-field">
+          <label class="dwr-edit-label">Fornecedor</label>
+          <input class="dwr-edit-input" id="de-supplier" type="text" value="${esc(r.supplier||'')}">
+        </div>
+        <div class="dwr-edit-field">
+          <label class="dwr-edit-label">Serviço</label>
+          <input class="dwr-edit-input" id="de-service" type="text" value="${esc(r.service||'')}">
+        </div>
+        <div class="dwr-edit-field">
+          <label class="dwr-edit-label">Área</label>
+          <input class="dwr-edit-input" id="de-area" type="text" value="${esc(r.businessArea||'')}">
+        </div>
+        <div class="dwr-edit-field">
+          <label class="dwr-edit-label">Responsável pelo Orçamento</label>
+          <input class="dwr-edit-input" id="de-business-owner" type="text" value="${esc(r.businessOwner||'')}">
+        </div>
+      </div>
+    </details>
+    <div style="margin-top:12px;display:flex;justify-content:flex-end;gap:8px;align-items:center">
+      <span id="de-err" style="flex:1;font-size:11.5px;color:var(--red-txt)"></span>
+      <button class="btn btn-primary" id="de-save-btn" onclick="saveDrawerChanges()">Salvar alterações</button>
+    </div>
+  </div>`;
+}
+
 function openDrawer(id){
+  CURRENT_DRAWER_ID = id;
   const r = enrich(RECORDS.find(x=>x.id===id));
   if(!r) return;
   document.getElementById('dwr-sup').textContent = r.supplier;
@@ -1634,7 +1717,7 @@ function openDrawer(id){
   </details>`;
 
   document.getElementById('dwr-body').innerHTML =
-    nxt + infoSec + homoSec + cadSec + contSec + svcSec + fatSec + pgmtSec + tlSec + commSec;
+    buildDrawerEditForm(r) + nxt + infoSec + homoSec + cadSec + contSec + svcSec + fatSec + pgmtSec + tlSec + commSec;
 
   document.getElementById('overlay').classList.add('open');
   document.getElementById('drawer').classList.add('open');
@@ -1643,6 +1726,76 @@ function openDrawer(id){
 function closeDrawer(){
   document.getElementById('overlay').classList.remove('open');
   document.getElementById('drawer').classList.remove('open');
+}
+
+function showToast(msg, type){
+  const el = document.getElementById('app-toast');
+  if(!el) return;
+  el.textContent = msg;
+  el.className = type==='err' ? 'toast-err' : 'toast-ok';
+  el.style.display = 'block';
+  clearTimeout(el._tid);
+  el._tid = setTimeout(function(){ el.style.display='none'; }, 3500);
+}
+
+function saveDrawerChanges(){
+  const id = CURRENT_DRAWER_ID;
+  if(!id) return;
+  const btn = document.getElementById('de-save-btn');
+  const errEl = document.getElementById('de-err');
+  const g = function(elId){ const el=document.getElementById(elId); return el ? el.value.trim() : null; };
+  const gn = function(elId){ const v=g(elId); return (v!==null && v!=='') ? parseFloat(v) : null; };
+  const data = {
+    id:                           id,
+    homologationStatus:           g('de-hom-status'),
+    contractStatus:               g('de-contract-status'),
+    supplierRegistrationStatus:   g('de-cad-status'),
+    nextAction:                   g('de-next-action'),
+    actionOwner:                  g('de-action-owner'),
+    nextActionDate:               g('de-action-date') || null,
+    priority:                     g('de-priority'),
+    contractValue:                gn('de-contract-value'),
+    contractEndDate:              g('de-contract-end') || null,
+    notes:                        g('de-notes'),
+    supplier:                     g('de-supplier'),
+    service:                      g('de-service'),
+    businessArea:                 g('de-area'),
+    businessOwner:                g('de-business-owner'),
+  };
+  if(btn){ btn.disabled=true; btn.textContent='Salvando…'; }
+  if(errEl) errEl.textContent='';
+
+  const IS_GAS = typeof google!=='undefined' && google.script && google.script.run;
+  if(!IS_GAS){
+    const idx = RECORDS.findIndex(x=>String(x.id)===String(id));
+    if(idx>=0) Object.assign(RECORDS[idx], data);
+    updateBadges(); render(); openDrawer(id);
+    showToast('Salvo (modo local — não persiste)', 'ok');
+    return;
+  }
+
+  google.script.run
+    .withSuccessHandler(function(result){
+      if(result && result.error){
+        if(errEl) errEl.textContent = result.error;
+        if(btn){ btn.disabled=false; btn.textContent='Salvar alterações'; }
+        return;
+      }
+      google.script.run
+        .withSuccessHandler(function(records){
+          if(Array.isArray(records)&&records.length>0) loadRecords(records);
+          else showEmptyState();
+          openDrawer(id);
+          showToast('Alterações salvas com sucesso', 'ok');
+        })
+        .withFailureHandler(function(e){ showErrorState(e); })
+        .getData();
+    })
+    .withFailureHandler(function(e){
+      if(errEl) errEl.textContent = 'Erro: ' + String(e);
+      if(btn){ btn.disabled=false; btn.textContent='Salvar alterações'; }
+    })
+    .updateContract(data);
 }
 
 /* ═══════════════════════════════════════════
@@ -1929,7 +2082,7 @@ function renderPipelineBoardHTML(allRecords){
       const dl = r.nextActionDate ? daysFromToday(r.nextActionDate) : null;
       const dlCls = dl!==null ? (dl<0?'late':dl<=3?'soon':'') : '';
       const dlLabel = dl!==null ? (dl<0 ? `${Math.abs(dl)}d atr.` : dl===0 ? 'Hoje' : `${dl}d`) : '';
-      return `<div class="kanban-card" onclick="openDrawer(${r.id})">
+      return `<div class="kanban-card" draggable="true" data-id="${r.id}" onclick="openDrawer(${r.id})">
         <div class="kc-stripe ${riskCls}"></div>
         <div class="kc-body">
           <div class="kc-sup">${esc(r.supplier)}</div>
@@ -1944,7 +2097,7 @@ function renderPipelineBoardHTML(allRecords){
         </div>
       </div>`;
     }).join('');
-    return `<div class="kanban-col">
+    return `<div class="kanban-col" data-stage="${stage}">
       <div class="kanban-col-hd">
         <span class="kch-dot" style="background:${dot}"></span>
         <span class="kch-name">${label}</span>
@@ -1960,9 +2113,79 @@ function renderPipelineBoardHTML(allRecords){
 function renderPipelineBoard(){
   const allRecords = RECORDS.map(enrich);
   const wrap = document.getElementById('pipeline-board-wrap');
-  if(wrap) wrap.innerHTML = renderPipelineBoardHTML(allRecords);
+  if(wrap){ wrap.innerHTML = renderPipelineBoardHTML(allRecords); initDragDrop(); }
   const el = document.getElementById('pipe-count');
   if(el) el.textContent = `${applyPipeFilters(allRecords).length} de ${allRecords.length} contratos`;
+}
+
+function initDragDrop(){
+  document.querySelectorAll('.kanban-card[draggable]').forEach(function(card){
+    card.addEventListener('dragstart', dndStart);
+    card.addEventListener('dragend', dndEnd);
+  });
+  document.querySelectorAll('.kanban-col').forEach(function(col){
+    col.addEventListener('dragover', dndOver);
+    col.addEventListener('dragleave', dndLeave);
+    col.addEventListener('drop', dndDrop);
+  });
+}
+
+function dndStart(e){
+  DND_DRAGGING_ID = this.dataset.id;
+  DND_DRAGGING_FROM = this.closest('.kanban-col').dataset.stage;
+  this.classList.add('dnd-dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function dndEnd(){
+  this.classList.remove('dnd-dragging');
+  document.querySelectorAll('.kanban-col.dnd-over').forEach(function(c){ c.classList.remove('dnd-over'); });
+}
+
+function dndOver(e){
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  this.classList.add('dnd-over');
+}
+
+function dndLeave(e){
+  if(!this.contains(e.relatedTarget)) this.classList.remove('dnd-over');
+}
+
+function dndDrop(e){
+  e.preventDefault();
+  this.classList.remove('dnd-over');
+  const toStage = this.dataset.stage;
+  const id = DND_DRAGGING_ID;
+  const fromStage = DND_DRAGGING_FROM;
+  if(!id || toStage === fromStage) return;
+  const recId = isNaN(id) ? id : Number(id);
+  const rec = RECORDS.find(x=>String(x.id)===String(recId));
+  if(!rec) return;
+  rec.macroStage = toStage;
+  renderPipelineBoard();
+  updateMacroStageGAS(recId, toStage, fromStage);
+}
+
+function updateMacroStageGAS(id, stage, oldStage){
+  const IS_GAS = typeof google!=='undefined' && google.script && google.script.run;
+  if(!IS_GAS){ showToast('Kanban local — não persiste na planilha', 'ok'); return; }
+  google.script.run
+    .withSuccessHandler(function(result){
+      if(result && result.error){
+        showToast(result.error, 'err');
+        const rec = RECORDS.find(x=>String(x.id)===String(id));
+        if(rec){ rec.macroStage = oldStage; renderPipelineBoard(); }
+        return;
+      }
+      showToast('Macroetapa atualizada', 'ok');
+    })
+    .withFailureHandler(function(e){
+      showToast('Erro ao mover card: ' + String(e), 'err');
+      const rec = RECORDS.find(x=>String(x.id)===String(id));
+      if(rec){ rec.macroStage = oldStage; renderPipelineBoard(); }
+    })
+    .updateMacroStage(id, stage);
 }
 
 function renderPipeline(){
@@ -2213,28 +2436,19 @@ function ncOverlayClick(e){
   if(e.target===document.getElementById('nc-overlay')) closeNewContractModal();
 }
 
-function ncToggleRegistration(){
-  const show = document.getElementById('nc-new-supplier').checked;
-  document.getElementById('nc-registration-wrap').style.display = show ? '' : 'none';
-  if(show) document.getElementById('nc-registration-required').checked = true;
-  else document.getElementById('nc-registration-required').checked = false;
-}
+function ncToggleRegistration(){ /* campo removido do formulário */ }
 
 function resetNewContractForm(){
-  const textIds = ['nc-supplier','nc-service','nc-area','nc-business-owner','nc-internal-owner',
-    'nc-contract-value','nc-contract-end','nc-next-action','nc-action-owner',
-    'nc-action-date','nc-dependency','nc-notes'];
+  const textIds = ['nc-supplier','nc-service','nc-area','nc-business-owner',
+    'nc-contract-value','nc-next-action','nc-action-date','nc-notes'];
   textIds.forEach(function(id){ const el=document.getElementById(id); if(el) el.value=''; });
-  ['nc-international','nc-new-supplier','nc-contract-required','nc-registration-required'].forEach(function(id){
+  ['nc-international','nc-new-supplier','nc-contract-required'].forEach(function(id){
     const el=document.getElementById(id); if(el) el.checked=false;
   });
-  document.getElementById('nc-contract-type').value  = 'novo_contrato';
   document.getElementById('nc-hom-status').value     = 'nao_iniciada';
   document.getElementById('nc-contract-status').value= 'nao_necessario';
   document.getElementById('nc-currency').value       = 'BRL';
-  document.getElementById('nc-macro').value          = 'homologacao';
   document.getElementById('nc-priority').value       = 'media';
-  document.getElementById('nc-registration-wrap').style.display = 'none';
   document.getElementById('nc-err').textContent = '';
   const btn = document.getElementById('nc-save-btn');
   btn.disabled = false;
@@ -2245,38 +2459,33 @@ function submitNewContract(){
   const sup        = document.getElementById('nc-supplier').value.trim();
   const svc        = document.getElementById('nc-service').value.trim();
   const area       = document.getElementById('nc-area').value.trim();
+  const owner      = document.getElementById('nc-business-owner').value.trim();
   const nextAction = document.getElementById('nc-next-action').value.trim();
-  const macro      = document.getElementById('nc-macro').value;
   const errEl      = document.getElementById('nc-err');
 
   if(!sup)        { errEl.textContent='Fornecedor é obrigatório.'; return; }
   if(!svc)        { errEl.textContent='Serviço é obrigatório.'; return; }
   if(!area)       { errEl.textContent='Área é obrigatória.'; return; }
+  if(!owner)      { errEl.textContent='Responsável pelo orçamento é obrigatório.'; return; }
   if(!nextAction) { errEl.textContent='Próxima Ação é obrigatória.'; return; }
   errEl.textContent = '';
 
   const rawValue = document.getElementById('nc-contract-value').value;
+  const newSup = document.getElementById('nc-new-supplier').checked;
   const data = {
     supplier:                     sup,
     service:                      svc,
     businessArea:                 area,
-    businessOwner:                document.getElementById('nc-business-owner').value.trim(),
-    internalOwner:                document.getElementById('nc-internal-owner').value.trim(),
-    contractType:                 document.getElementById('nc-contract-type').value,
+    businessOwner:                owner,
     internationalSupplier:        document.getElementById('nc-international').checked,
-    newSupplier:                  document.getElementById('nc-new-supplier').checked,
+    newSupplier:                  newSup,
     homologationStatus:           document.getElementById('nc-hom-status').value,
     contractRequired:             document.getElementById('nc-contract-required').checked,
     contractStatus:               document.getElementById('nc-contract-status').value,
-    contractEndDate:              document.getElementById('nc-contract-end').value || null,
     contractValue:                rawValue !== '' ? parseFloat(rawValue) : null,
     currency:                     document.getElementById('nc-currency').value,
-    supplierRegistrationRequired: document.getElementById('nc-registration-required').checked,
-    macroStage:                   macro,
     nextAction:                   nextAction,
-    actionOwner:                  document.getElementById('nc-action-owner').value.trim(),
     nextActionDate:               document.getElementById('nc-action-date').value || null,
-    dependency:                   document.getElementById('nc-dependency').value.trim() || null,
     priority:                     document.getElementById('nc-priority').value,
     notes:                        document.getElementById('nc-notes').value.trim(),
   };
