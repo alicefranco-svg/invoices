@@ -1,0 +1,1676 @@
+<title>SupplierOps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#EEF1F6;--surface:#FFFFFF;--surface-2:#F5F7FB;--border:#DDE2EA;--border-strong:#C4CAD6;
+  --text-1:#0D1523;--text-2:#4B5568;--text-3:#8896A9;
+  --sb-bg:#141D2E;--sb-border:#1C2740;--sb-text:rgba(255,255,255,.58);--sb-hover:rgba(255,255,255,.82);--sb-active:#fff;--sb-active-bg:rgba(59,130,246,.16);--sb-active-bar:#3B82F6;
+  --accent:#2563EB;--accent-soft:#EFF6FF;--accent-border:#BFDBFE;
+  --green:#16A34A;--green-bg:#F0FDF4;--green-txt:#14532D;--green-bd:#BBF7D0;
+  --yellow:#A16207;--yellow-bg:#FEFCE8;--yellow-txt:#78350F;--yellow-bd:#FDE68A;
+  --red:#DC2626;--red-bg:#FEF2F2;--red-txt:#7F1D1D;--red-bd:#FECACA;
+  --blue:#2563EB;--blue-bg:#EFF6FF;--blue-txt:#1E40AF;--blue-bd:#BFDBFE;
+  --gray:#6B7280;--gray-bg:#F9FAFB;--gray-txt:#374151;--gray-bd:#E5E7EB;
+  --orange:#C2410C;--orange-bg:#FFF7ED;--orange-txt:#7C2D12;--orange-bd:#FED7AA;
+  --r-sm:4px;--r-md:6px;--r-lg:10px;
+  --sh-sm:0 1px 2px rgba(0,0,0,.05);--sh-md:0 4px 8px -2px rgba(0,0,0,.08),0 2px 4px -1px rgba(0,0,0,.04);--sh-lg:0 12px 24px -4px rgba(0,0,0,.1),0 4px 8px -2px rgba(0,0,0,.06);--sh-xl:0 24px 40px -8px rgba(0,0,0,.16),0 8px 16px -4px rgba(0,0,0,.08);
+  --sb-w:232px;--hdr:52px;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0C1120;--surface:#141D2E;--surface-2:#1A2540;--border:#1E2A40;--border-strong:#2A3854;
+  --text-1:#E8EDF5;--text-2:#8896A9;--text-3:#4B5568;
+  --sb-bg:#0C1120;--sb-border:#141D2E;
+  --accent-soft:rgba(37,99,235,.12);--accent-border:rgba(59,130,246,.3);
+  --green-bg:rgba(22,163,74,.12);--green-txt:#4ADE80;--green-bd:rgba(22,163,74,.25);
+  --yellow-bg:rgba(161,98,7,.12);--yellow-txt:#FCD34D;--yellow-bd:rgba(161,98,7,.3);
+  --red-bg:rgba(220,38,38,.12);--red-txt:#FCA5A5;--red-bd:rgba(220,38,38,.25);
+  --blue-bg:rgba(37,99,235,.12);--blue-txt:#93C5FD;--blue-bd:rgba(37,99,235,.25);
+  --gray-bg:rgba(107,114,128,.1);--gray-txt:#9CA3AF;--gray-bd:rgba(107,114,128,.2);
+  --orange-bg:rgba(194,65,12,.12);--orange-txt:#FDBA74;--orange-bd:rgba(194,65,12,.25);
+}}
+:root[data-theme="dark"]{
+  --bg:#0C1120;--surface:#141D2E;--surface-2:#1A2540;--border:#1E2A40;--border-strong:#2A3854;
+  --text-1:#E8EDF5;--text-2:#8896A9;--text-3:#4B5568;
+  --sb-bg:#0C1120;--sb-border:#141D2E;
+  --accent-soft:rgba(37,99,235,.12);--accent-border:rgba(59,130,246,.3);
+  --green-bg:rgba(22,163,74,.12);--green-txt:#4ADE80;--green-bd:rgba(22,163,74,.25);
+  --yellow-bg:rgba(161,98,7,.12);--yellow-txt:#FCD34D;--yellow-bd:rgba(161,98,7,.3);
+  --red-bg:rgba(220,38,38,.12);--red-txt:#FCA5A5;--red-bd:rgba(220,38,38,.25);
+  --blue-bg:rgba(37,99,235,.12);--blue-txt:#93C5FD;--blue-bd:rgba(37,99,235,.25);
+  --gray-bg:rgba(107,114,128,.1);--gray-txt:#9CA3AF;--gray-bd:rgba(107,114,128,.2);
+  --orange-bg:rgba(194,65,12,.12);--orange-txt:#FDBA74;--orange-bd:rgba(194,65,12,.25);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text-1);line-height:1.5;font-size:14px;-webkit-font-smoothing:antialiased}
+
+/* ─── LAYOUT ─────────────────────────────── */
+#app{display:flex;height:100vh;overflow:hidden}
+#sidebar{width:var(--sb-w);background:var(--sb-bg);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;z-index:10}
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+#topbar{height:var(--hdr);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:14px;flex-shrink:0}
+#page{flex:1;overflow-y:auto;padding:24px}
+
+/* ─── SIDEBAR ────────────────────────────── */
+.sb-brand{padding:16px 18px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--sb-border)}
+.sb-logo{width:26px;height:26px;background:var(--accent);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-logo svg{display:block}
+.sb-name{font-size:14.5px;font-weight:700;color:#fff;letter-spacing:-.015em}
+.sb-name em{font-style:normal;color:rgba(255,255,255,.4);font-weight:400}
+.sb-nav{padding:10px 10px;flex:1}
+.sb-grp{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.28);padding:10px 8px 4px;margin-top:4px}
+.sb-link{display:flex;align-items:center;gap:9px;padding:7.5px 9px;border-radius:var(--r-md);color:var(--sb-text);cursor:pointer;font-size:13px;font-weight:450;margin-bottom:1px;border-left:2px solid transparent;transition:background .12s,color .12s;user-select:none}
+.sb-link:hover{background:rgba(255,255,255,.055);color:var(--sb-hover)}
+.sb-link.active{background:var(--sb-active-bg);color:var(--sb-active);border-left-color:var(--sb-active-bar);font-weight:560}
+.sb-link svg{flex-shrink:0;opacity:.65}
+.sb-link.active svg{opacity:1}
+.sb-cnt{margin-left:auto;background:rgba(220,38,38,.85);color:#fff;font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.sb-footer{padding:12px 10px;border-top:1px solid var(--sb-border)}
+.view-toggle{display:flex;background:rgba(255,255,255,.07);border-radius:var(--r-md);padding:3px;gap:2px}
+.vt{flex:1;padding:5px 6px;border-radius:calc(var(--r-md) - 1px);border:none;background:transparent;color:rgba(255,255,255,.45);font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;transition:background .12s,color .12s}
+.vt.active{background:rgba(255,255,255,.12);color:#fff}
+
+/* ─── TOPBAR ─────────────────────────────── */
+#tb-title{font-size:15px;font-weight:650;color:var(--text-1);letter-spacing:-.01em}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+
+/* ─── BUTTONS ────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:var(--r-md);border:1px solid transparent;font-family:inherit;font-size:12.5px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{background:#1D4ED8}
+.btn-ghost{background:transparent;color:var(--text-2);border-color:transparent;padding:5px 10px}
+.btn-ghost:hover{background:var(--surface-2);color:var(--text-1)}
+.btn-secondary{background:var(--surface);color:var(--text-1);border-color:var(--border-strong)}
+.btn-secondary:hover{background:var(--surface-2)}
+
+/* ─── BADGES ─────────────────────────────── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:100px;font-size:11px;font-weight:500;white-space:nowrap;border:1px solid transparent;letter-spacing:.01em}
+.bd{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.badge-green{background:var(--green-bg);color:var(--green-txt);border-color:var(--green-bd)}
+.badge-yellow{background:var(--yellow-bg);color:var(--yellow-txt);border-color:var(--yellow-bd)}
+.badge-red{background:var(--red-bg);color:var(--red-txt);border-color:var(--red-bd)}
+.badge-blue{background:var(--blue-bg);color:var(--blue-txt);border-color:var(--blue-bd)}
+.badge-gray{background:var(--gray-bg);color:var(--gray-txt);border-color:var(--gray-bd)}
+.badge-orange{background:var(--orange-bg);color:var(--orange-txt);border-color:var(--orange-bd)}
+.bd-green{background:var(--green)}.bd-yellow{background:var(--yellow)}.bd-red{background:var(--red)}.bd-blue{background:var(--blue)}.bd-gray{background:var(--gray)}.bd-orange{background:var(--orange)}
+
+/* ─── KPI CARDS ──────────────────────────── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:24px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;transition:box-shadow .15s}
+.kpi:hover{box-shadow:var(--sh-md)}
+.kpi-label{font-size:10.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.kpi-val{font-size:28px;font-weight:700;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums;color:var(--text-1)}
+.kpi-val.red{color:var(--red)}.kpi-val.yellow{color:var(--yellow)}.kpi-val.green{color:var(--green)}.kpi-val.blue{color:var(--blue)}
+.kpi-sub{font-size:11px;color:var(--text-3);margin-top:4px}
+
+/* ─── SECTION ────────────────────────────── */
+.sec{margin-bottom:24px}
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sec-title{font-size:14px;font-weight:650;color:var(--text-1);letter-spacing:-.01em}
+.sec-count{font-size:11.5px;color:var(--text-3)}
+
+/* ─── TABLES ─────────────────────────────── */
+.tw{overflow-x:auto;border-radius:var(--r-lg);border:1px solid var(--border);background:var(--surface)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead th{background:var(--surface-2);color:var(--text-3);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:9px 13px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--border)}
+thead th.r{text-align:right}
+tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:background .08s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--surface-2)}
+tbody tr.row-overdue td{background:rgba(220,38,38,.025)}
+tbody tr.row-overdue:hover td{background:rgba(220,38,38,.05)!important}
+td{padding:9px 13px;vertical-align:middle;color:var(--text-1)}
+td.muted{color:var(--text-3)}
+td.r{text-align:right;font-variant-numeric:tabular-nums}
+.td-sup{font-weight:600;max-width:160px}
+.td-svc{color:var(--text-3);font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.td-act{color:var(--text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px;font-size:12px}
+.days-tag{display:inline-flex;align-items:center;gap:3px;font-variant-numeric:tabular-nums;font-size:11.5px;color:var(--text-2)}
+.days-tag.late{color:var(--red);font-weight:650}
+.days-tag.soon{color:var(--yellow);font-weight:550}
+
+/* ─── OVERVIEW SIDE CARDS ────────────────── */
+.ov-grid{display:grid;grid-template-columns:1fr 340px;gap:16px}
+@media(max-width:1100px){.ov-grid{grid-template-columns:1fr}}
+.ov-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;margin-bottom:12px}
+.ov-card:last-child{margin-bottom:0}
+
+.blocker-row{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-left:3px solid var(--red);background:var(--red-bg);border-radius:0 var(--r-md) var(--r-md) 0;margin-bottom:7px;cursor:pointer;transition:filter .1s}
+.blocker-row:hover{filter:brightness(.97)}
+.blocker-row:last-child{margin-bottom:0}
+.bl-sup{font-size:12.5px;font-weight:600;color:var(--text-1)}
+.bl-reason{font-size:11.5px;color:var(--text-2);margin-top:2px}
+
+.pay-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r-md);border:1px solid var(--border);background:var(--surface-2);margin-bottom:6px;cursor:pointer;transition:background .1s}
+.pay-row:hover{background:var(--border)}
+.pay-row:last-child{margin-bottom:0}
+.pay-row.overdue{border-color:var(--red-bd);background:var(--red-bg)}
+.pr-sup{font-size:12.5px;font-weight:600;color:var(--text-1);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pr-val{font-size:13px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pr-date{font-size:11px;color:var(--text-3);white-space:nowrap}
+
+.fu-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r-md);border:1px solid var(--yellow-bd);background:var(--yellow-bg);margin-bottom:6px;cursor:pointer}
+.fu-row:last-child{margin-bottom:0}
+.fu-row.late{border-color:var(--red-bd);background:var(--red-bg)}
+.fu-sup{font-size:12.5px;font-weight:600;color:var(--text-1);flex:1}
+.fu-date{font-size:11px;white-space:nowrap}
+.fu-date.late{color:var(--red);font-weight:600}
+.fu-date.due{color:var(--yellow);font-weight:600}
+
+/* ─── LIDERANÇA VIEW ─────────────────────── */
+.leader-kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:20px}
+.leader-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px}
+.lkpi-label{font-size:10.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.lkpi-val{font-size:30px;font-weight:700;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.lkpi-val.red{color:var(--red)}.lkpi-val.yellow{color:var(--yellow)}.lkpi-val.green{color:var(--green)}.lkpi-val.blue{color:var(--blue)}
+.lkpi-sub{font-size:12px;color:var(--text-3);margin-top:4px}
+
+.stage-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 20px;margin-bottom:12px}
+.sb-stage-row{display:flex;align-items:center;gap:12px;padding:6px 0;border-bottom:1px solid var(--border)}
+.sb-stage-row:last-child{border-bottom:none}
+.sbs-name{font-size:12.5px;font-weight:500;color:var(--text-2);width:160px;flex-shrink:0}
+.sbs-bar-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.sbs-bar{height:100%;background:var(--accent);border-radius:3px;transition:width .4s}
+.sbs-cnt{font-size:12px;font-weight:600;color:var(--text-1);width:24px;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ─── DRAWER ─────────────────────────────── */
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:200;opacity:0;transition:opacity .2s;pointer-events:none}
+#overlay.open{opacity:1;pointer-events:all}
+#drawer{position:fixed;top:0;right:0;bottom:0;width:620px;max-width:94vw;background:var(--surface);z-index:201;transform:translateX(100%);transition:transform .25s cubic-bezier(.32,0,.67,0);display:flex;flex-direction:column;box-shadow:var(--sh-xl)}
+#drawer.open{transform:translateX(0);transition:transform .25s cubic-bezier(.33,1,.68,1)}
+.dwr-hd{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:14px;flex-shrink:0}
+.dwr-hd-info{flex:1;min-width:0}
+.dwr-sup{font-size:17px;font-weight:700;letter-spacing:-.02em;margin-bottom:2px}
+.dwr-svc{font-size:13px;color:var(--text-2);margin-bottom:8px}
+.dwr-meta{display:flex;gap:7px;flex-wrap:wrap}
+.dwr-close{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-md);width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:var(--text-2);transition:background .12s}
+.dwr-close:hover{background:var(--border);color:var(--text-1)}
+.dwr-body{flex:1;overflow-y:auto;padding:18px 22px}
+
+/* ─── EMPTY STATE ────────────────────────── */
+.empty{text-align:center;padding:36px 20px;color:var(--text-3)}
+.empty svg{margin-bottom:10px;opacity:.35}
+.empty p{font-size:13px}
+
+/* ─── STUB PAGE ──────────────────────────── */
+.stub{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:12px;color:var(--text-3);text-align:center}
+.stub-icon{font-size:40px;opacity:.4}
+.stub h2{font-size:16px;font-weight:600;color:var(--text-2)}
+.stub p{font-size:13px;max-width:320px}
+
+/* ─── UTILS ──────────────────────────────── */
+.hidden{display:none!important}
+.flex{display:flex}.items-center{align-items:center}.gap-6{gap:6px}.gap-8{gap:8px}
+.mt-4{margin-top:4px}.mt-8{margin-top:8px}.mt-12{margin-top:12px}
+.mb-8{margin-bottom:8px}.mb-12{margin-bottom:12px}.mb-16{margin-bottom:16px}
+.text-muted{color:var(--text-3)}.text-2{color:var(--text-2)}.fw-600{font-weight:600}
+.font-mono{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
+
+@media(max-width:768px){
+  :root{--sb-w:0px}
+  #sidebar{display:none}
+  #topbar{padding:0 16px}
+  #page{padding:16px}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .ov-grid{grid-template-columns:1fr}
+}
+
+/* ─── FILTER BAR ─────────────────────────── */
+.filter-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.filter-bar input[type=text]{height:30px;padding:0 10px;border:1px solid var(--border-strong);border-radius:var(--r-md);background:var(--bg);color:var(--text-1);font-size:12.5px;font-family:inherit;min-width:180px;outline:none;transition:border .12s}
+.filter-bar input[type=text]:focus{border-color:var(--accent)}
+.fb-select{height:30px;padding:0 28px 0 10px;border:1px solid var(--border-strong);border-radius:var(--r-md);background:var(--bg);color:var(--text-1);font-size:12.5px;font-family:inherit;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238896A9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;min-width:130px;transition:border .12s}
+.fb-select:focus{border-color:var(--accent)}
+.filter-sep{width:1px;height:20px;background:var(--border-strong);flex-shrink:0;margin:0 4px}
+.filter-toggle{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;font-size:12px;color:var(--text-2);white-space:nowrap}
+.filter-toggle input[type=checkbox]{accent-color:var(--accent);cursor:pointer;width:14px;height:14px}
+.filter-count{font-size:11.5px;color:var(--text-3);margin-left:auto;white-space:nowrap}
+
+/* ─── KANBAN ─────────────────────────────── */
+.kanban-wrap{overflow-x:auto;padding-bottom:12px}
+.kanban-board{display:flex;gap:12px;align-items:flex-start;min-width:max-content}
+.kanban-col{width:258px;flex-shrink:0;background:var(--surface-2);border-radius:var(--r-lg);border:1px solid var(--border);display:flex;flex-direction:column;max-height:calc(100vh - 210px)}
+.kanban-col-hd{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0;background:var(--surface);border-radius:var(--r-lg) var(--r-lg) 0 0}
+.kch-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.kch-name{font-size:12.5px;font-weight:650;color:var(--text-1);flex:1}
+.kch-count{font-size:11px;font-weight:700;color:var(--text-3);background:var(--border);padding:2px 8px;border-radius:100px;font-variant-numeric:tabular-nums}
+.kch-sub{font-size:11px;color:var(--text-3);padding:5px 12px;border-bottom:1px solid var(--border);background:var(--surface)}
+.kanban-cards{overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:7px;flex:1}
+.kanban-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);cursor:pointer;transition:box-shadow .12s,border-color .12s;overflow:hidden;display:flex}
+.kanban-card:hover{box-shadow:var(--sh-md);border-color:var(--border-strong)}
+.kc-stripe{width:4px;flex-shrink:0}
+.kc-stripe.red{background:var(--red)}.kc-stripe.yellow{background:var(--yellow)}.kc-stripe.blue{background:var(--blue)}.kc-stripe.green{background:var(--green)}.kc-stripe.gray{background:var(--gray)}
+.kc-body{padding:9px 10px;flex:1;min-width:0}
+.kc-sup{font-size:12.5px;font-weight:650;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc-svc{font-size:11px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:5px}
+.kc-status{margin-bottom:6px}
+.kc-action{font-size:11.5px;color:var(--text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:5px}
+.kc-foot{display:flex;align-items:center;gap:5px}
+.kc-owner{font-size:10.5px;color:var(--text-3);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kc-deadline{font-size:10.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.kc-deadline.late{color:var(--red);font-weight:650}
+.kc-deadline.soon{color:var(--yellow);font-weight:600}
+
+/* ─── BILLING PAGE ───────────────────────── */
+.bill-filter{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.bill-filter label{font-size:12px;color:var(--text-2)}
+.step-badge{display:inline-flex;align-items:center;font-size:11px;padding:2px 7px;border-radius:var(--r-sm);border:1px solid;font-weight:500;white-space:nowrap}
+.step-ok{background:var(--green-bg);color:var(--green-txt);border-color:var(--green-bd)}
+.step-pend{background:var(--yellow-bg);color:var(--yellow-txt);border-color:var(--yellow-bd)}
+.step-na{background:var(--gray-bg);color:var(--gray-txt);border-color:var(--gray-bd)}
+.step-err{background:var(--red-bg);color:var(--red-txt);border-color:var(--red-bd)}
+
+/* ─── RENEWALS PAGE ──────────────────────── */
+.renewal-group{margin-bottom:22px}
+.renewal-group-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:10px 14px;border-radius:var(--r-md);border:1px solid}
+.rgh-red{background:var(--red-bg);border-color:var(--red-bd)}
+.rgh-orange{background:var(--orange-bg);border-color:var(--orange-bd)}
+.rgh-yellow{background:var(--yellow-bg);border-color:var(--yellow-bd)}
+.rgh-gray{background:var(--gray-bg);border-color:var(--gray-bd)}
+.rgh-title{font-size:13px;font-weight:650;flex:1}
+.rgh-title.red{color:var(--red-txt)}.rgh-title.orange{color:var(--orange-txt)}.rgh-title.yellow{color:var(--yellow-txt)}.rgh-title.gray{color:var(--gray-txt)}
+.rgh-count{font-size:12px;font-weight:600;color:var(--text-2)}
+</style>
+
+<!-- ───────────────── APP SHELL ───────────────── -->
+<div id="app">
+  <aside id="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" fill="white"/><rect x="8" y="1" width="5" height="5" rx="1" fill="white" opacity=".6"/><rect x="1" y="8" width="5" height="5" rx="1" fill="white" opacity=".6"/><rect x="8" y="8" width="5" height="5" rx="1" fill="white" opacity=".3"/></svg>
+      </div>
+      <span class="sb-name">Supplier<em>Ops</em></span>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-grp">Principal</div>
+      <div class="sb-link active" data-page="overview" onclick="navigate('overview')">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1.5" y="1.5" width="5" height="5" rx="1" fill="currentColor"/><rect x="8.5" y="1.5" width="5" height="5" rx="1" fill="currentColor"/><rect x="1.5" y="8.5" width="5" height="5" rx="1" fill="currentColor"/><rect x="8.5" y="8.5" width="5" height="5" rx="1" fill="currentColor" opacity=".4"/></svg>
+        Visão Geral
+        <span class="sb-cnt" id="badge-overview">0</span>
+      </div>
+      <div class="sb-link" data-page="pipeline" onclick="navigate('pipeline')">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1" y="3" width="3" height="9" rx="1" fill="currentColor"/><rect x="6" y="1.5" width="3" height="12" rx="1" fill="currentColor"/><rect x="11" y="4.5" width="3" height="7.5" rx="1" fill="currentColor"/></svg>
+        Pipeline
+      </div>
+      <div class="sb-link" data-page="billing" onclick="navigate('billing')">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 2h9a1 1 0 011 1v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M5 5.5h5M5 7.5h5M5 9.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Faturamento &amp; Pgto
+        <span class="sb-cnt" id="badge-billing">0</span>
+      </div>
+      <div class="sb-link" data-page="renewals" onclick="navigate('renewals')">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1.5" y="3" width="12" height="10.5" rx="1.5" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M4.5 1.5v3M10.5 1.5v3M1.5 6.5h12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Renovações
+        <span class="sb-cnt" id="badge-renewals">0</span>
+      </div>
+    </nav>
+    <div class="sb-footer">
+      <div style="font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:8px;padding-left:2px">Visão</div>
+      <div class="view-toggle">
+        <button class="vt active" id="vt-op" onclick="setView('operacional')">Operacional</button>
+        <button class="vt" id="vt-ld" onclick="setView('lideranca')">Liderança</button>
+      </div>
+    </div>
+  </aside>
+
+  <div id="main">
+    <header id="topbar">
+      <span id="tb-title">Visão Geral</span>
+      <div class="tb-right">
+        <button class="btn btn-ghost" style="font-size:12px;color:var(--text-3)" onclick="alert('Próximas etapas incluirão formulário de nova contratação.')">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Nova Contratação
+        </button>
+      </div>
+    </header>
+    <div id="page"></div>
+  </div>
+</div>
+
+<div id="overlay" onclick="closeDrawer()"></div>
+<div id="drawer">
+  <div class="dwr-hd">
+    <div class="dwr-hd-info">
+      <div class="dwr-sup" id="dwr-sup"></div>
+      <div class="dwr-svc" id="dwr-svc"></div>
+      <div class="dwr-meta" id="dwr-meta"></div>
+    </div>
+    <div class="dwr-close" onclick="closeDrawer()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+  <div class="dwr-body" id="dwr-body">
+    <p class="text-muted" style="font-size:13px">Detalhamento completo disponível na Etapa 4.</p>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   DATA — 17 registros de teste
+═══════════════════════════════════════════ */
+const RECORDS = [
+{
+  id:1, supplier:'Accenture Brasil', service:'Consultoria de Transformação Digital',
+  businessArea:'Tecnologia', businessOwner:'Carlos Mendes', internalOwner:'Ana Lima',
+  contractType:'novo_contrato', internationalSupplier:false, newSupplier:true,
+  homologationStatus:'aguardando_documentos', homologationStartDate:'2026-08-01', homologationEndDate:null,
+  contractRequired:true, contractStatus:'solicitacao_pendente', contractRequestedDate:null,
+  contractSentDate:null, signatureSentDate:null, signatureDate:null, contractEndDate:null,
+  autoRenewal:false, renewalNoticeDays:null, contractValue:150000, renewalStatus:null,
+  supplierRegistrationRequired:true, supplierRegistrationStatus:'nao_iniciado', supplierCode:null,
+  serviceStatus:'nao_iniciado', serviceStartDate:null, serviceEndDate:null,
+  recurringService:false, recurringPeriodicity:null,
+  invoiceExpected:false, invoiceReceived:false, invoiceNumber:null, invoiceDate:null,
+  invoiceValue:150000, currency:'BRL', paymentTermsDays:30, paymentRegistered:false,
+  poRequired:true, poStatus:'nao_aplicavel', poNumber:null, poRequestDate:null, poIssueDate:null,
+  invoicePortalStatus:'nao_aplicavel', invoicePortalDate:null,
+  migoRequired:true, migoStatus:'nao_aplicavel', migoDate:null,
+  expectedPaymentDate:null, paymentStatus:'aguardando_programacao', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Enviar lista de documentos exigidos para homologação',
+  actionOwner:'Ana Lima', nextActionDate:'2026-09-02', dependency:null, priority:'alta',
+  lastSupplierContact:'2026-08-28', lastSupplierContactSummary:'Apresentação do processo de homologação',
+  nextSupplierUpdateDate:'2026-09-02', followUpRequired:true,
+  lastUpdate:'2026-08-28', macroStage:'homologacao',
+  notes:'Fornecedor novo, precisa completar homologação antes de iniciar a contratação formal.',
+  communicationHistory:[
+    {date:'2026-08-28',type:'email',summary:'Apresentação do processo de homologação ao fornecedor'},
+    {date:'2026-08-25',type:'reuniao',summary:'Reunião de kickoff com a área de Tecnologia'}
+  ]
+},
+{
+  id:2, supplier:'Amazon Web Services', service:'Cloud Computing — AWS Enterprise',
+  businessArea:'Infraestrutura', businessOwner:'Rodrigo Neves', internalOwner:'Ana Lima',
+  contractType:'novo_contrato', internationalSupplier:true, newSupplier:true,
+  homologationStatus:'em_analise', homologationStartDate:'2026-08-10', homologationEndDate:null,
+  contractRequired:true, contractStatus:'solicitacao_pendente', contractRequestedDate:null,
+  contractSentDate:null, signatureSentDate:null, signatureDate:null, contractEndDate:null,
+  autoRenewal:false, renewalNoticeDays:null, contractValue:320000, renewalStatus:null,
+  supplierRegistrationRequired:true, supplierRegistrationStatus:'cadastro_solicitado', supplierCode:null,
+  serviceStatus:'nao_iniciado', serviceStartDate:null, serviceEndDate:null,
+  recurringService:true, recurringPeriodicity:'mensal',
+  invoiceExpected:false, invoiceReceived:false, invoiceNumber:null, invoiceDate:null,
+  invoiceValue:320000, currency:'USD', paymentTermsDays:30, paymentRegistered:false,
+  poRequired:true, poStatus:'nao_aplicavel', poNumber:null, poRequestDate:null, poIssueDate:null,
+  invoicePortalStatus:'nao_aplicavel', invoicePortalDate:null,
+  migoRequired:false, migoStatus:'nao_aplicavel', migoDate:null,
+  expectedPaymentDate:null, paymentStatus:'aguardando_programacao', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Acompanhar resultado da análise de Compliance',
+  actionOwner:'Ana Lima', nextActionDate:'2026-09-05', dependency:'Área de Compliance', priority:'media',
+  lastSupplierContact:'2026-08-20', lastSupplierContactSummary:'Documentação enviada pelo fornecedor',
+  nextSupplierUpdateDate:'2026-09-08', followUpRequired:false,
+  lastUpdate:'2026-08-22', macroStage:'homologacao',
+  notes:'Fornecedor internacional. Documentação recebida, aguardando análise interna.',
+  communicationHistory:[
+    {date:'2026-08-20',type:'email',summary:'Documentação de homologação enviada pelo fornecedor'},
+    {date:'2026-08-10',type:'email',summary:'Solicitação de documentos para homologação'}
+  ]
+},
+{
+  id:3, supplier:'Deloitte Consulting', service:'Auditoria Externa e Advisory',
+  businessArea:'Financeiro', businessOwner:'Mariana Costa', internalOwner:'Pedro Souza',
+  contractType:'novo_contrato', internationalSupplier:false, newSupplier:false,
+  homologationStatus:'homologacao_concluida', homologationStartDate:'2026-07-01', homologationEndDate:'2026-07-25',
+  contractRequired:true, contractStatus:'em_elaboracao', contractRequestedDate:'2026-07-26',
+  contractSentDate:null, signatureSentDate:null, signatureDate:null, contractEndDate:null,
+  autoRenewal:false, renewalNoticeDays:null, contractValue:280000, renewalStatus:null,
+  supplierRegistrationRequired:false, supplierRegistrationStatus:'cadastro_concluido', supplierCode:'FORN-0412',
+  serviceStatus:'nao_iniciado', serviceStartDate:null, serviceEndDate:null,
+  recurringService:false, recurringPeriodicity:null,
+  invoiceExpected:false, invoiceReceived:false, invoiceNumber:null, invoiceDate:null,
+  invoiceValue:280000, currency:'BRL', paymentTermsDays:30, paymentRegistered:false,
+  poRequired:true, poStatus:'nao_aplicavel', poNumber:null, poRequestDate:null, poIssueDate:null,
+  invoicePortalStatus:'nao_aplicavel', invoicePortalDate:null,
+  migoRequired:false, migoStatus:'nao_aplicavel', migoDate:null,
+  expectedPaymentDate:null, paymentStatus:'aguardando_programacao', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Revisar minutas enviadas pelo Jurídico e enviar ao fornecedor',
+  actionOwner:'Pedro Souza', nextActionDate:'2026-09-04', dependency:null, priority:'alta',
+  lastSupplierContact:'2026-08-20', lastSupplierContactSummary:'Alinhamento sobre escopo do contrato',
+  nextSupplierUpdateDate:'2026-09-05', followUpRequired:true,
+  lastUpdate:'2026-08-26', macroStage:'contratacao',
+  notes:'Fornecedor já cadastrado. Contrato em elaboração pelo Jurídico.',
+  communicationHistory:[
+    {date:'2026-08-20',type:'reuniao',summary:'Alinhamento do escopo contratual com sócio da Deloitte'},
+    {date:'2026-08-05',type:'email',summary:'Solicitação de abertura de contrato enviada ao Jurídico'}
+  ]
+},
+{
+  id:4, supplier:'McKinsey & Company', service:'Estratégia Corporativa 2026',
+  businessArea:'Estratégia', businessOwner:'Lucas Ferreira', internalOwner:'Pedro Souza',
+  contractType:'novo_contrato', internationalSupplier:false, newSupplier:false,
+  homologationStatus:'homologacao_concluida', homologationStartDate:'2026-06-15', homologationEndDate:'2026-07-10',
+  contractRequired:true, contractStatus:'aguardando_assinatura_fornecedor', contractRequestedDate:'2026-07-12',
+  contractSentDate:'2026-08-01', signatureSentDate:'2026-08-20', signatureDate:null, contractEndDate:null,
+  autoRenewal:false, renewalNoticeDays:null, contractValue:480000, renewalStatus:null,
+  supplierRegistrationRequired:false, supplierRegistrationStatus:'cadastro_concluido', supplierCode:'FORN-0287',
+  serviceStatus:'nao_iniciado', serviceStartDate:null, serviceEndDate:null,
+  recurringService:false, recurringPeriodicity:null,
+  invoiceExpected:false, invoiceReceived:false, invoiceNumber:null, invoiceDate:null,
+  invoiceValue:480000, currency:'BRL', paymentTermsDays:30, paymentRegistered:false,
+  poRequired:false, poStatus:'nao_aplicavel', poNumber:null, poRequestDate:null, poIssueDate:null,
+  invoicePortalStatus:'nao_aplicavel', invoicePortalDate:null,
+  migoRequired:false, migoStatus:'nao_aplicavel', migoDate:null,
+  expectedPaymentDate:null, paymentStatus:'aguardando_programacao', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Cobrar assinatura do contrato — prazo vencido',
+  actionOwner:'Pedro Souza', nextActionDate:'2026-08-28', dependency:null, priority:'urgente',
+  lastSupplierContact:'2026-08-28', lastSupplierContactSummary:'E-mail de follow-up sobre assinatura pendente — sem retorno',
+  nextSupplierUpdateDate:'2026-08-29', followUpRequired:true,
+  lastUpdate:'2026-08-28', macroStage:'contratacao',
+  notes:'Contrato aguardando assinatura do fornecedor há mais de 10 dias. Follow-up urgente necessário.',
+  communicationHistory:[
+    {date:'2026-08-28',type:'email',summary:'Follow-up urgente sobre assinatura — sem retorno até o momento'},
+    {date:'2026-08-25',type:'email',summary:'Envio do contrato para assinatura via plataforma DocuSign'},
+    {date:'2026-08-20',type:'reuniao',summary:'Versão final negociada e aprovada pelo Jurídico de ambas as partes'}
+  ]
+},
+{
+  id:5, supplier:'Salesforce Brasil', service:'CRM Enterprise — Sales Cloud',
+  businessArea:'Comercial', businessOwner:'Fernanda Alves', internalOwner:'Ana Lima',
+  contractType:'novo_contrato', internationalSupplier:false, newSupplier:true,
+  homologationStatus:'homologacao_concluida', homologationStartDate:'2026-07-20', homologationEndDate:'2026-08-15',
+  contractRequired:true, contractStatus:'assinatura_concluida', contractRequestedDate:'2026-08-01',
+  contractSentDate:'2026-08-05', signatureSentDate:'2026-08-14', signatureDate:'2026-08-20', contractEndDate:'2027-08-20',
+  autoRenewal:true, renewalNoticeDays:60, contractValue:95000, renewalStatus:null,
+  supplierRegistrationRequired:true, supplierRegistrationStatus:'cadastro_em_andamento', supplierCode:null,
+  serviceStatus:'nao_iniciado', serviceStartDate:null, serviceEndDate:null,
+  recurringService:true, recurringPeriodicity:'anual',
+  invoiceExpected:false, invoiceReceived:false, invoiceNumber:null, invoiceDate:null,
+  invoiceValue:95000, currency:'BRL', paymentTermsDays:30, paymentRegistered:false,
+  poRequired:true, poStatus:'nao_aplicavel', poNumber:null, poRequestDate:null, poIssueDate:null,
+  invoicePortalStatus:'nao_aplicavel', invoicePortalDate:null,
+  migoRequired:false, migoStatus:'nao_aplicavel', migoDate:null,
+  expectedPaymentDate:null, paymentStatus:'aguardando_programacao', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Acompanhar cadastro do fornecedor no sistema interno',
+  actionOwner:'Ana Lima', nextActionDate:'2026-09-01', dependency:'Área de Compras', priority:'alta',
+  lastSupplierContact:'2026-08-22', lastSupplierContactSummary:'Confirmação de assinatura e próximos passos',
+  nextSupplierUpdateDate:'2026-09-03', followUpRequired:true,
+  lastUpdate:'2026-08-26', macroStage:'contratacao',
+  notes:'Contrato assinado. Aguardando conclusão do cadastro para iniciar o serviço.',
+  communicationHistory:[
+    {date:'2026-08-22',type:'email',summary:'Confirmação de assinatura do contrato e alinhamento de próximos passos'},
+    {date:'2026-08-14',type:'email',summary:'Contrato enviado para assinatura'}
+  ]
+},
+{
+  id:6, supplier:'Microsoft Brasil', service:'Microsoft 365 — Licenciamento Enterprise',
+  businessArea:'Tecnologia', businessOwner:'Rodrigo Neves', internalOwner:'Ana Lima',
+  contractType:'renovacao', internationalSupplier:false, newSupplier:false,
+  homologationStatus:'homologacao_concluida', homologationStartDate:'2025-01-10', homologationEndDate:'2025-01-20',
+  contractRequired:true, contractStatus:'assinatura_concluida', contractRequestedDate:'2025-01-25',
+  contractSentDate:'2025-02-01', signatureSentDate:'2025-02-05', signatureDate:'2025-02-10', contractEndDate:'2026-12-31',
+  autoRenewal:true, renewalNoticeDays:90, contractValue:185000, renewalStatus:'renovado',
+  supplierRegistrationRequired:false, supplierRegistrationStatus:'cadastro_concluido', supplierCode:'FORN-0091',
+  serviceStatus:'recorrente', serviceStartDate:'2025-02-15', serviceEndDate:null,
+  recurringService:true, recurringPeriodicity:'mensal',
+  invoiceExpected:true, invoiceReceived:false, invoiceNumber:null, invoiceDate:null,
+  invoiceValue:15416, currency:'BRL', paymentTermsDays:30, paymentRegistered:false,
+  poRequired:false, poStatus:'nao_aplicavel', poNumber:null, poRequestDate:null, poIssueDate:null,
+  invoicePortalStatus:'nao_aplicavel', invoicePortalDate:null,
+  migoRequired:false, migoStatus:'nao_aplicavel', migoDate:null,
+  expectedPaymentDate:'2026-09-30', paymentStatus:'aguardando_programacao', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Aguardar recebimento da invoice de setembro',
+  actionOwner:'Ana Lima', nextActionDate:'2026-09-10', dependency:null, priority:'baixa',
+  lastSupplierContact:'2026-08-01', lastSupplierContactSummary:'Confirmação de faturamento mensal',
+  nextSupplierUpdateDate:'2026-09-10', followUpRequired:false,
+  lastUpdate:'2026-08-01', macroStage:'prestacao_servico',
+  notes:'Serviço recorrente e estável. Aguardar invoice mensal normalmente.',
+  communicationHistory:[
+    {date:'2026-08-01',type:'email',summary:'Confirmação de faturamento mensal recebida'}
+  ]
+},
+{
+  id:7, supplier:'SAP Brasil', service:'SAP S/4HANA — Módulo FI/CO',
+  businessArea:'Financeiro', businessOwner:'Mariana Costa', internalOwner:'Pedro Souza',
+  contractType:'aditivo', internationalSupplier:false, newSupplier:false,
+  homologationStatus:'homologacao_concluida', homologationStartDate:'2025-06-01', homologationEndDate:'2025-06-20',
+  contractRequired:true, contractStatus:'assinatura_concluida', contractRequestedDate:'2025-07-01',
+  contractSentDate:'2025-07-10', signatureSentDate:'2025-07-20', signatureDate:'2025-07-28', contractEndDate:'2027-07-28',
+  autoRenewal:false, renewalNoticeDays:90, contractValue:620000, renewalStatus:null,
+  supplierRegistrationRequired:false, supplierRegistrationStatus:'cadastro_concluido', supplierCode:'FORN-0055',
+  serviceStatus:'em_andamento', serviceStartDate:'2025-08-01', serviceEndDate:'2027-07-28',
+  recurringService:false, recurringPeriodicity:null,
+  invoiceExpected:true, invoiceReceived:false, invoiceNumber:null, invoiceDate:null,
+  invoiceValue:103333, currency:'BRL', paymentTermsDays:30, paymentRegistered:false,
+  poRequired:true, poStatus:'nao_aplicavel', poNumber:null, poRequestDate:null, poIssueDate:null,
+  invoicePortalStatus:'nao_aplicavel', invoicePortalDate:null,
+  migoRequired:true, migoStatus:'nao_aplicavel', migoDate:null,
+  expectedPaymentDate:'2026-10-05', paymentStatus:'aguardando_programacao', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Solicitar emissão da invoice do mês de setembro ao fornecedor',
+  actionOwner:'Pedro Souza', nextActionDate:'2026-09-05', dependency:null, priority:'media',
+  lastSupplierContact:'2026-08-05', lastSupplierContactSummary:'Confirmação de entrega do marco anterior',
+  nextSupplierUpdateDate:'2026-09-05', followUpRequired:true,
+  lastUpdate:'2026-08-10', macroStage:'faturamento',
+  notes:'Faturamento mensal conforme cronograma contratual.',
+  communicationHistory:[
+    {date:'2026-08-05',type:'email',summary:'Confirmação de entrega do marco de julho'}
+  ]
+},
+{
+  id:8, supplier:'Oracle Brasil', service:'Oracle Database — Licenças Enterprise',
+  businessArea:'Tecnologia', businessOwner:'Rodrigo Neves', internalOwner:'Ana Lima',
+  contractType:'renovacao', internationalSupplier:false, newSupplier:false,
+  homologationStatus:'homologacao_concluida', homologationStartDate:'2024-10-01', homologationEndDate:'2024-10-15',
+  contractRequired:true, contractStatus:'assinatura_concluida', contractRequestedDate:'2024-10-20',
+  contractSentDate:'2024-11-01', signatureSentDate:'2024-11-10', signatureDate:'2024-11-20', contractEndDate:'2027-11-20',
+  autoRenewal:false, renewalNoticeDays:120, contractValue:410000, renewalStatus:null,
+  supplierRegistrationRequired:false, supplierRegistrationStatus:'cadastro_concluido', supplierCode:'FORN-0033',
+  serviceStatus:'em_andamento', serviceStartDate:'2024-12-01', serviceEndDate:null,
+  recurringService:true, recurringPeriodicity:'anual',
+  invoiceExpected:true, invoiceReceived:true, invoiceNumber:'INV-2026-08-4471', invoiceDate:'2026-08-15',
+  invoiceValue:250000, currency:'USD', paymentTermsDays:30, paymentRegistered:true,
+  poRequired:true, poStatus:'po_pendente', poNumber:null, poRequestDate:null, poIssueDate:null,
+  invoicePortalStatus:'nao_aplicavel', invoicePortalDate:null,
+  migoRequired:false, migoStatus:'nao_aplicavel', migoDate:null,
+  expectedPaymentDate:'2026-09-15', paymentStatus:'aguardando_programacao', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Solicitar emissão do PO para invoice INV-2026-08-4471',
+  actionOwner:'Ana Lima', nextActionDate:'2026-09-01', dependency:'Área de Compras', priority:'alta',
+  lastSupplierContact:'2026-08-16', lastSupplierContactSummary:'Recebimento e confirmação da invoice',
+  nextSupplierUpdateDate:'2026-09-10', followUpRequired:true,
+  lastUpdate:'2026-08-20', macroStage:'faturamento',
+  notes:'Invoice recebida em USD. Aguardando PO para liberar cadastro no portal.',
+  communicationHistory:[
+    {date:'2026-08-16',type:'email',summary:'Recebimento e confirmação da invoice INV-2026-08-4471'},
+    {date:'2026-08-15',type:'email',summary:'Invoice enviada pelo fornecedor'}
+  ]
+},
+{
+  id:9, supplier:'IBM Brasil', service:'Consultoria de Dados e Analytics',
+  businessArea:'Tecnologia', businessOwner:'Carlos Mendes', internalOwner:'Pedro Souza',
+  contractType:'novo_contrato', internationalSupplier:false, newSupplier:false,
+  homologationStatus:'homologacao_concluida', homologationStartDate:'2026-04-01', homologationEndDate:'2026-04-20',
+  contractRequired:true, contractStatus:'assinatura_concluida', contractRequestedDate:'2026-04-22',
+  contractSentDate:'2026-05-05', signatureSentDate:'2026-05-20', signatureDate:'2026-05-28', contractEndDate:'2026-11-28',
+  autoRenewal:false, renewalNoticeDays:60, contractValue:195000, renewalStatus:null,
+  supplierRegistrationRequired:false, supplierRegistrationStatus:'cadastro_concluido', supplierCode:'FORN-0178',
+  serviceStatus:'em_andamento', serviceStartDate:'2026-06-01', serviceEndDate:'2026-11-28',
+  recurringService:false, recurringPeriodicity:null,
+  invoiceExpected:true, invoiceReceived:true, invoiceNumber:'IBM-BR-26-0892', invoiceDate:'2026-08-20',
+  invoiceValue:65000, currency:'BRL', paymentTermsDays:30, paymentRegistered:true,
+  poRequired:true, poStatus:'po_emitido', poNumber:'PO-2026-3845', poRequestDate:'2026-08-22', poIssueDate:'2026-08-27',
+  invoicePortalStatus:'portal_pendente', invoicePortalDate:null,
+  migoRequired:true, migoStatus:'migo_pendente', migoDate:null,
+  expectedPaymentDate:'2026-09-20', paymentStatus:'aguardando_programacao', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Cadastrar invoice IBM-BR-26-0892 no portal de pagamentos',
+  actionOwner:'Pedro Souza', nextActionDate:'2026-09-02', dependency:null, priority:'alta',
+  lastSupplierContact:'2026-08-21', lastSupplierContactSummary:'Confirmação do PO emitido ao fornecedor',
+  nextSupplierUpdateDate:'2026-09-10', followUpRequired:false,
+  lastUpdate:'2026-08-27', macroStage:'faturamento',
+  notes:'PO emitido. Próximo passo: cadastrar no portal e realizar MIGO.',
+  communicationHistory:[
+    {date:'2026-08-21',type:'email',summary:'Confirmação do número do PO enviada ao fornecedor'},
+    {date:'2026-08-20',type:'email',summary:'Invoice IBM-BR-26-0892 recebida e validada'}
+  ]
+},
+{
+  id:10, supplier:'TOTVS', service:'Suporte Técnico ERP TOTVS Protheus',
+  businessArea:'Operações', businessOwner:'Sofia Rocha', internalOwner:'Pedro Souza',
+  contractType:'renovacao', internationalSupplier:false, newSupplier:false,
+  homologationStatus:'homologacao_concluida', homologationStartDate:'2024-01-10', homologationEndDate:'2024-01-25',
+  contractRequired:true, contractStatus:'assinatura_concluida', contractRequestedDate:'2024-02-01',
+  contractSentDate:'2024-02-10', signatureSentDate:'2024-02-15', signatureDate:'2024-02-20', contractEndDate:'2027-02-20',
+  autoRenewal:true, renewalNoticeDays:90, contractValue:84000, renewalStatus:'renovado',
+  supplierRegistrationRequired:false, supplierRegistrationStatus:'cadastro_concluido', supplierCode:'FORN-0019',
+  serviceStatus:'recorrente', serviceStartDate:'2024-03-01', serviceEndDate:null,
+  recurringService:true, recurringPeriodicity:'mensal',
+  invoiceExpected:true, invoiceReceived:true, invoiceNumber:'NF-2026-005521', invoiceDate:'2026-08-10',
+  invoiceValue:7000, currency:'BRL', paymentTermsDays:28, paymentRegistered:true,
+  poRequired:true, poStatus:'po_emitido', poNumber:'PO-2026-3712', poRequestDate:'2026-08-11', poIssueDate:'2026-08-15',
+  invoicePortalStatus:'invoice_no_portal', invoicePortalDate:'2026-08-18',
+  migoRequired:true, migoStatus:'migo_pendente', migoDate:null,
+  expectedPaymentDate:'2026-09-07', paymentStatus:'aguardando_programacao', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Realizar MIGO da NF-2026-005521 — prazo vencido',
+  actionOwner:'Pedro Souza', nextActionDate:'2026-08-29', dependency:null, priority:'urgente',
+  lastSupplierContact:'2026-08-12', lastSupplierContactSummary:'Confirmação do recebimento da NF pelo fornecedor',
+  nextSupplierUpdateDate:'2026-09-07', followUpRequired:false,
+  lastUpdate:'2026-08-18', macroStage:'faturamento',
+  notes:'Invoice no portal. MIGO pendente e atrasado. Desbloquear pagamento urgente.',
+  communicationHistory:[
+    {date:'2026-08-12',type:'email',summary:'Confirmação de recebimento da nota fiscal pelo fornecedor'},
+    {date:'2026-08-10',type:'email',summary:'NF-2026-005521 recebida e lançada no sistema'}
+  ]
+},
+{
+  id:11, supplier:'Stefanini Group', service:'Fábrica de Software — Squad Dedicado',
+  businessArea:'Produto', businessOwner:'Gabriel Lima', internalOwner:'Ana Lima',
+  contractType:'novo_contrato', internationalSupplier:false, newSupplier:false,
+  homologationStatus:'homologacao_concluida', homologationStartDate:'2026-03-01', homologationEndDate:'2026-03-18',
+  contractRequired:true, contractStatus:'assinatura_concluida', contractRequestedDate:'2026-03-20',
+  contractSentDate:'2026-04-01', signatureSentDate:'2026-04-10', signatureDate:'2026-04-15', contractEndDate:'2026-10-15',
+  autoRenewal:false, renewalNoticeDays:60, contractValue:240000, renewalStatus:'renovacao_em_analise',
+  supplierRegistrationRequired:false, supplierRegistrationStatus:'cadastro_concluido', supplierCode:'FORN-0204',
+  serviceStatus:'em_andamento', serviceStartDate:'2026-05-01', serviceEndDate:'2026-10-15',
+  recurringService:true, recurringPeriodicity:'mensal',
+  invoiceExpected:true, invoiceReceived:true, invoiceNumber:'STEF-26-0741', invoiceDate:'2026-08-05',
+  invoiceValue:40000, currency:'BRL', paymentTermsDays:30, paymentRegistered:true,
+  poRequired:true, poStatus:'po_emitido', poNumber:'PO-2026-3688', poRequestDate:'2026-08-06', poIssueDate:'2026-08-09',
+  invoicePortalStatus:'invoice_no_portal', invoicePortalDate:'2026-08-12',
+  migoRequired:true, migoStatus:'migo_concluido', migoDate:'2026-08-19',
+  expectedPaymentDate:'2026-09-10', paymentStatus:'programado', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Aguardar liquidação do pagamento programado para 10/09',
+  actionOwner:'Ana Lima', nextActionDate:'2026-09-11', dependency:null, priority:'baixa',
+  lastSupplierContact:'2026-08-13', lastSupplierContactSummary:'Confirmação do cadastro da invoice no portal',
+  nextSupplierUpdateDate:'2026-09-11', followUpRequired:false,
+  lastUpdate:'2026-08-19', macroStage:'pagamento',
+  notes:'Tudo processado. Pagamento programado para 10/09. Contrato vence em outubro — avaliar renovação.',
+  communicationHistory:[
+    {date:'2026-08-13',type:'email',summary:'Confirmação ao fornecedor do cadastro da invoice no portal'},
+    {date:'2026-08-05',type:'email',summary:'Invoice STEF-26-0741 recebida'}
+  ]
+},
+{
+  id:12, supplier:'CI&T', service:'DevOps e Cloud Engineering',
+  businessArea:'Tecnologia', businessOwner:'Carlos Mendes', internalOwner:'Pedro Souza',
+  contractType:'novo_contrato', internationalSupplier:false, newSupplier:false,
+  homologationStatus:'homologacao_concluida', homologationStartDate:'2026-01-15', homologationEndDate:'2026-02-01',
+  contractRequired:true, contractStatus:'assinatura_concluida', contractRequestedDate:'2026-02-05',
+  contractSentDate:'2026-02-15', signatureSentDate:'2026-02-22', signatureDate:'2026-03-01', contractEndDate:'2026-08-31',
+  autoRenewal:false, renewalNoticeDays:30, contractValue:320000, renewalStatus:'renovacao_em_analise',
+  supplierRegistrationRequired:false, supplierRegistrationStatus:'cadastro_concluido', supplierCode:'FORN-0156',
+  serviceStatus:'em_andamento', serviceStartDate:'2026-03-10', serviceEndDate:'2026-08-31',
+  recurringService:false, recurringPeriodicity:null,
+  invoiceExpected:true, invoiceReceived:true, invoiceNumber:'CIT-NF-2026-1142', invoiceDate:'2026-07-31',
+  invoiceValue:80000, currency:'BRL', paymentTermsDays:30, paymentRegistered:true,
+  poRequired:true, poStatus:'po_emitido', poNumber:'PO-2026-3540', poRequestDate:'2026-08-01', poIssueDate:'2026-08-05',
+  invoicePortalStatus:'invoice_no_portal', invoicePortalDate:'2026-08-08',
+  migoRequired:true, migoStatus:'migo_concluido', migoDate:'2026-08-12',
+  expectedPaymentDate:'2026-08-20', paymentStatus:'atrasado', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Escalar pagamento em atraso junto ao setor financeiro — urgente',
+  actionOwner:'Pedro Souza', nextActionDate:'2026-08-31', dependency:'Financeiro', priority:'urgente',
+  lastSupplierContact:'2026-08-25', lastSupplierContactSummary:'Fornecedor cobrou pagamento por e-mail — respondido com previsão',
+  nextSupplierUpdateDate:'2026-08-31', followUpRequired:true,
+  lastUpdate:'2026-08-25', macroStage:'pagamento',
+  notes:'Pagamento em atraso há 11 dias. Fornecedor cobrou. Escalar urgente.',
+  communicationHistory:[
+    {date:'2026-08-25',type:'email',summary:'Fornecedor cobrou pagamento — respondido com previsão de resolução'},
+    {date:'2026-08-20',type:'email',summary:'Pagamento não processado na data prevista — investigação iniciada'},
+    {date:'2026-08-08',type:'email',summary:'Invoice cadastrada no portal de pagamentos'}
+  ]
+},
+{
+  id:13, supplier:'Gartner Brasil', service:'Licença Gartner Research & Advisory',
+  businessArea:'Estratégia', businessOwner:'Lucas Ferreira', internalOwner:'Ana Lima',
+  contractType:'renovacao', internationalSupplier:false, newSupplier:false,
+  homologationStatus:'homologacao_concluida', homologationStartDate:'2025-09-01', homologationEndDate:'2025-09-10',
+  contractRequired:true, contractStatus:'assinatura_concluida', contractRequestedDate:'2025-09-15',
+  contractSentDate:'2025-09-20', signatureSentDate:'2025-09-25', signatureDate:'2025-10-01', contractEndDate:'2026-09-28',
+  autoRenewal:false, renewalNoticeDays:60, contractValue:72000, renewalStatus:'renovacao_em_analise',
+  supplierRegistrationRequired:false, supplierRegistrationStatus:'cadastro_concluido', supplierCode:'FORN-0144',
+  serviceStatus:'recorrente', serviceStartDate:'2025-10-05', serviceEndDate:'2026-09-28',
+  recurringService:true, recurringPeriodicity:'anual',
+  invoiceExpected:false, invoiceReceived:false, invoiceNumber:null, invoiceDate:null,
+  invoiceValue:72000, currency:'BRL', paymentTermsDays:30, paymentRegistered:false,
+  poRequired:false, poStatus:'nao_aplicavel', poNumber:null, poRequestDate:null, poIssueDate:null,
+  invoicePortalStatus:'nao_aplicavel', invoicePortalDate:null,
+  migoRequired:false, migoStatus:'nao_aplicavel', migoDate:null,
+  expectedPaymentDate:null, paymentStatus:'aguardando_programacao', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Iniciar processo de renovação — contrato vence em 28 dias',
+  actionOwner:'Ana Lima', nextActionDate:'2026-09-03', dependency:null, priority:'alta',
+  lastSupplierContact:'2026-08-15', lastSupplierContactSummary:'Reunião de avaliação de valor do serviço',
+  nextSupplierUpdateDate:'2026-09-03', followUpRequired:true,
+  lastUpdate:'2026-08-15', macroStage:'prestacao_servico',
+  notes:'Contrato vence em 28 dias. Renovação em análise. Decisão precisa ser tomada até 15/09.',
+  communicationHistory:[
+    {date:'2026-08-15',type:'reuniao',summary:'Reunião de avaliação de valor: equipe decidiu renovar com ajuste de escopo'},
+    {date:'2026-08-10',type:'email',summary:'Alerta interno de vencimento do contrato gerado automaticamente'}
+  ]
+},
+{
+  id:14, supplier:'Bain & Company', service:'Projeto de Eficiência Operacional — ESG',
+  businessArea:'ESG', businessOwner:'Isabela Torres', internalOwner:'Pedro Souza',
+  contractType:'sem_contrato', internationalSupplier:false, newSupplier:false,
+  homologationStatus:'homologacao_concluida', homologationStartDate:'2026-07-10', homologationEndDate:'2026-07-25',
+  contractRequired:false, contractStatus:'nao_necessario', contractRequestedDate:null,
+  contractSentDate:null, signatureSentDate:null, signatureDate:null, contractEndDate:null,
+  autoRenewal:false, renewalNoticeDays:null, contractValue:45000, renewalStatus:null,
+  supplierRegistrationRequired:false, supplierRegistrationStatus:'cadastro_concluido', supplierCode:'FORN-0301',
+  serviceStatus:'em_andamento', serviceStartDate:'2026-08-01', serviceEndDate:'2026-09-30',
+  recurringService:false, recurringPeriodicity:null,
+  invoiceExpected:true, invoiceReceived:false, invoiceNumber:null, invoiceDate:null,
+  invoiceValue:45000, currency:'BRL', paymentTermsDays:30, paymentRegistered:false,
+  poRequired:true, poStatus:'po_solicitado', poNumber:null, poRequestDate:'2026-08-25', poIssueDate:null,
+  invoicePortalStatus:'nao_aplicavel', invoicePortalDate:null,
+  migoRequired:false, migoStatus:'nao_aplicavel', migoDate:null,
+  expectedPaymentDate:null, paymentStatus:'aguardando_programacao', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Acompanhar emissão do PO junto à área de Compras',
+  actionOwner:'Pedro Souza', nextActionDate:'2026-09-03', dependency:'Área de Compras', priority:'media',
+  lastSupplierContact:'2026-08-20', lastSupplierContactSummary:'Alinhamento do cronograma de entrega',
+  nextSupplierUpdateDate:'2026-09-05', followUpRequired:false,
+  lastUpdate:'2026-08-25', macroStage:'prestacao_servico',
+  notes:'Contratação por PO simplificado. Sem contrato formal. Projeto com prazo definido.',
+  communicationHistory:[
+    {date:'2026-08-20',type:'reuniao',summary:'Alinhamento do cronograma de entregas do projeto ESG'},
+    {date:'2026-08-01',type:'email',summary:'Confirmação do início do projeto'}
+  ]
+},
+{
+  id:15, supplier:'PwC Brasil', service:'Tax Advisory e Transfer Pricing',
+  businessArea:'Financeiro', businessOwner:'Mariana Costa', internalOwner:'Ana Lima',
+  contractType:'novo_contrato', internationalSupplier:false, newSupplier:true,
+  homologationStatus:'bloqueada', homologationStartDate:'2026-07-15', homologationEndDate:null,
+  contractRequired:true, contractStatus:'bloqueado', contractRequestedDate:null,
+  contractSentDate:null, signatureSentDate:null, signatureDate:null, contractEndDate:null,
+  autoRenewal:false, renewalNoticeDays:null, contractValue:190000, renewalStatus:null,
+  supplierRegistrationRequired:true, supplierRegistrationStatus:'nao_iniciado', supplierCode:null,
+  serviceStatus:'nao_iniciado', serviceStartDate:null, serviceEndDate:null,
+  recurringService:false, recurringPeriodicity:null,
+  invoiceExpected:false, invoiceReceived:false, invoiceNumber:null, invoiceDate:null,
+  invoiceValue:190000, currency:'BRL', paymentTermsDays:30, paymentRegistered:false,
+  poRequired:true, poStatus:'nao_aplicavel', poNumber:null, poRequestDate:null, poIssueDate:null,
+  invoicePortalStatus:'nao_aplicavel', invoicePortalDate:null,
+  migoRequired:false, migoStatus:'nao_aplicavel', migoDate:null,
+  expectedPaymentDate:null, paymentStatus:'aguardando_programacao', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Cobrar certidão negativa de débitos para desbloquear homologação',
+  actionOwner:'Ana Lima', nextActionDate:'2026-08-27', dependency:null, priority:'urgente',
+  lastSupplierContact:'2026-08-27', lastSupplierContactSummary:'Fornecedor informou prazo de 5 dias para certidão',
+  nextSupplierUpdateDate:'2026-09-01', followUpRequired:true,
+  lastUpdate:'2026-08-27', macroStage:'homologacao',
+  notes:'BLOQUEADA: Certidão Negativa de Débitos vencida. Fornecedor informou emissão em até 5 dias.',
+  communicationHistory:[
+    {date:'2026-08-27',type:'email',summary:'Fornecedor informou prazo de 5 dias para emissão da certidão'},
+    {date:'2026-08-20',type:'email',summary:'Documentação parcialmente enviada — certidão pendente'},
+    {date:'2026-07-15',type:'email',summary:'Solicitação inicial de documentos para homologação'}
+  ]
+},
+{
+  id:16, supplier:'KPMG Brasil', service:'Compliance & Risk Management',
+  businessArea:'Jurídico', businessOwner:'Isabela Torres', internalOwner:'Pedro Souza',
+  contractType:'renovacao', internationalSupplier:false, newSupplier:false,
+  homologationStatus:'homologacao_concluida', homologationStartDate:'2024-11-01', homologationEndDate:'2024-11-15',
+  contractRequired:true, contractStatus:'assinatura_concluida', contractRequestedDate:'2024-11-20',
+  contractSentDate:'2024-12-01', signatureSentDate:'2024-12-10', signatureDate:'2024-12-15', contractEndDate:'2026-12-15',
+  autoRenewal:false, renewalNoticeDays:90, contractValue:155000, renewalStatus:null,
+  supplierRegistrationRequired:false, supplierRegistrationStatus:'cadastro_concluido', supplierCode:'FORN-0117',
+  serviceStatus:'recorrente', serviceStartDate:'2025-01-05', serviceEndDate:null,
+  recurringService:true, recurringPeriodicity:'trimestral',
+  invoiceExpected:true, invoiceReceived:false, invoiceNumber:null, invoiceDate:null,
+  invoiceValue:38750, currency:'BRL', paymentTermsDays:30, paymentRegistered:false,
+  poRequired:true, poStatus:'nao_aplicavel', poNumber:null, poRequestDate:null, poIssueDate:null,
+  invoicePortalStatus:'nao_aplicavel', invoicePortalDate:null,
+  migoRequired:true, migoStatus:'nao_aplicavel', migoDate:null,
+  expectedPaymentDate:null, paymentStatus:'aguardando_programacao', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Cobrar invoice trimestral ao fornecedor — prevista para 01/09',
+  actionOwner:'Pedro Souza', nextActionDate:'2026-09-01', dependency:null, priority:'media',
+  lastSupplierContact:'2026-08-01', lastSupplierContactSummary:'Confirmação de entrega do relatório Q2',
+  nextSupplierUpdateDate:'2026-09-01', followUpRequired:true,
+  lastUpdate:'2026-08-01', macroStage:'faturamento',
+  notes:'Faturamento trimestral. Relatório Q2 entregue. Aguardar invoice.',
+  communicationHistory:[
+    {date:'2026-08-01',type:'email',summary:'Confirmação de entrega e aceite do relatório Q2 2026'}
+  ]
+},
+{
+  id:17, supplier:'Capgemini', service:'Transformação Ágil — Treinamento e Coaching',
+  businessArea:'RH', businessOwner:'Sofia Rocha', internalOwner:'Ana Lima',
+  contractType:'renovacao', internationalSupplier:false, newSupplier:false,
+  homologationStatus:'homologacao_concluida', homologationStartDate:'2025-10-01', homologationEndDate:'2025-10-12',
+  contractRequired:true, contractStatus:'em_negociacao', contractRequestedDate:'2026-07-01',
+  contractSentDate:'2026-07-20', signatureSentDate:null, signatureDate:null, contractEndDate:'2026-10-15',
+  autoRenewal:false, renewalNoticeDays:45, contractValue:130000, renewalStatus:'renovacao_em_andamento',
+  supplierRegistrationRequired:false, supplierRegistrationStatus:'cadastro_concluido', supplierCode:'FORN-0229',
+  serviceStatus:'em_andamento', serviceStartDate:'2025-10-20', serviceEndDate:'2026-10-15',
+  recurringService:false, recurringPeriodicity:null,
+  invoiceExpected:false, invoiceReceived:false, invoiceNumber:null, invoiceDate:null,
+  invoiceValue:130000, currency:'BRL', paymentTermsDays:30, paymentRegistered:false,
+  poRequired:false, poStatus:'nao_aplicavel', poNumber:null, poRequestDate:null, poIssueDate:null,
+  invoicePortalStatus:'nao_aplicavel', invoicePortalDate:null,
+  migoRequired:false, migoStatus:'nao_aplicavel', migoDate:null,
+  expectedPaymentDate:null, paymentStatus:'aguardando_programacao', actualPaymentDate:null,
+  proofOfPayment:false, proofSentToSupplier:false,
+  nextAction:'Fechar negociação do aditivo — contrato vence em 45 dias',
+  actionOwner:'Ana Lima', nextActionDate:'2026-09-10', dependency:null, priority:'alta',
+  lastSupplierContact:'2026-08-22', lastSupplierContactSummary:'Contraproposta recebida — ajuste de 8% no valor',
+  nextSupplierUpdateDate:'2026-09-05', followUpRequired:true,
+  lastUpdate:'2026-08-22', macroStage:'contratacao',
+  notes:'Renovação em negociação. Fornecedor propôs reajuste de 8%. Contrato vigente vence em 15/10.',
+  communicationHistory:[
+    {date:'2026-08-22',type:'email',summary:'Contraproposta com reajuste de 8% recebida — enviada para análise interna'},
+    {date:'2026-08-10',type:'reuniao',summary:'Reunião de negociação: alinhamento de escopo e valor'},
+    {date:'2026-07-20',type:'email',summary:'Proposta de renovação enviada ao fornecedor'}
+  ]
+}
+];
+
+/* ═══════════════════════════════════════════
+   CONFIG MAPS
+═══════════════════════════════════════════ */
+const STATUS_LABELS = {
+  nao_iniciada:'Não iniciada', aguardando_documentos:'Aguardando documentos',
+  em_analise:'Em análise', aguardando_fornecedor:'Aguardando fornecedor',
+  aguardando_area_interna:'Aguardando área interna', homologacao_concluida:'Homologação concluída',
+  bloqueada:'Bloqueada', bloqueado:'Bloqueado',
+  nao_necessario:'Não necessário', solicitacao_pendente:'Solicitação pendente',
+  contrato_solicitado:'Contrato solicitado', em_elaboracao:'Em elaboração',
+  em_negociacao:'Em negociação', aguardando_assinatura_interna:'Ag. assinatura interna',
+  aguardando_assinatura_fornecedor:'Ag. assinatura fornecedor',
+  assinatura_concluida:'Assinado', nao_iniciado:'Não iniciado',
+  em_andamento:'Em andamento', concluido:'Concluído', recorrente:'Recorrente', pausado:'Pausado',
+  nao_aplicavel:'N/A', po_pendente:'PO pendente', po_solicitado:'PO solicitado', po_emitido:'PO emitido',
+  portal_pendente:'Portal pendente', invoice_no_portal:'No portal',
+  migo_pendente:'MIGO pendente', migo_concluido:'MIGO concluído',
+  aguardando_programacao:'Ag. programação', programado:'Programado',
+  pago:'Pago', atrasado:'Em atraso',
+  aguardando_invoice:'Aguardando invoice', invoice_recebida:'Invoice recebida', em_validacao:'Em validação',
+  nao_iniciado_cad:'Não iniciado', cadastro_solicitado:'Cadastro solicitado',
+  cadastro_em_andamento:'Cadastro em andamento', cadastro_concluido:'Cadastrado',
+  renovacao_nao_iniciado:'Não iniciado', renovacao_em_analise:'Em análise',
+  renovacao_aprovada:'Aprovada', nao_renovar:'Não renovar',
+  renovacao_em_andamento:'Em andamento', renovado:'Renovado'
+};
+const STATUS_CLS = {
+  nao_iniciada:'badge-gray', aguardando_documentos:'badge-yellow', em_analise:'badge-blue',
+  aguardando_fornecedor:'badge-yellow', aguardando_area_interna:'badge-yellow',
+  homologacao_concluida:'badge-green', bloqueada:'badge-red', bloqueado:'badge-red',
+  nao_necessario:'badge-gray', solicitacao_pendente:'badge-yellow', contrato_solicitado:'badge-blue',
+  em_elaboracao:'badge-blue', em_negociacao:'badge-yellow', aguardando_assinatura_interna:'badge-yellow',
+  aguardando_assinatura_fornecedor:'badge-yellow', assinatura_concluida:'badge-green',
+  nao_iniciado:'badge-gray', em_andamento:'badge-blue', concluido:'badge-green',
+  recorrente:'badge-green', pausado:'badge-yellow', nao_aplicavel:'badge-gray',
+  po_pendente:'badge-yellow', po_solicitado:'badge-blue', po_emitido:'badge-green',
+  portal_pendente:'badge-yellow', invoice_no_portal:'badge-green',
+  migo_pendente:'badge-yellow', migo_concluido:'badge-green',
+  aguardando_programacao:'badge-gray', programado:'badge-blue',
+  pago:'badge-green', atrasado:'badge-red',
+  aguardando_invoice:'badge-yellow', invoice_recebida:'badge-blue', em_validacao:'badge-yellow',
+  cadastro_solicitado:'badge-blue', cadastro_em_andamento:'badge-yellow', cadastro_concluido:'badge-green',
+  renovacao_nao_iniciado:'badge-gray', renovacao_em_analise:'badge-blue',
+  renovacao_aprovada:'badge-green', nao_renovar:'badge-red',
+  renovacao_em_andamento:'badge-blue', renovado:'badge-green'
+};
+const PRIORITY_CLS = {urgente:'badge-red',alta:'badge-orange',media:'badge-yellow',baixa:'badge-gray'};
+const PRIORITY_DOT_CLS = {urgente:'bd-red',alta:'bd-orange',media:'bd-yellow',baixa:'bd-gray'};
+const MACRO_LABELS = {
+  homologacao:'Homologação', contratacao:'Contratação',
+  prestacao_servico:'Prestação do Serviço', faturamento:'Faturamento', pagamento:'Pagamento'
+};
+const CONTRACT_TYPE_LABELS = {
+  novo_contrato:'Novo Contrato', aditivo:'Aditivo', renovacao:'Renovação',
+  sem_contrato:'Sem Contrato', po_simplificado:'PO / Simplificado'
+};
+const PRIORITY_ORDER = {urgente:0,alta:1,media:2,baixa:3};
+
+/* ═══════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════ */
+const TODAY = new Date('2026-08-31T12:00:00');
+
+function pd(s){ return s ? new Date(s+'T12:00:00') : null; }
+function daysFromToday(s){
+  const d = pd(s); if(!d) return null;
+  return Math.round((d - TODAY) / 86400000);
+}
+function isOD(s){ const n = daysFromToday(s); return n !== null && n < 0; }
+function fmtDate(s){
+  if(!s) return '—';
+  const d = pd(s);
+  return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+}
+function fmtShort(s){
+  if(!s) return '—';
+  const d = pd(s);
+  return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+}
+function fmtCur(v,c){
+  if(v==null) return '—';
+  return new Intl.NumberFormat('pt-BR',{style:'currency',currency:c||'BRL',minimumFractionDigits:0,maximumFractionDigits:0}).format(v);
+}
+function badge(k){
+  return `<span class="badge ${STATUS_CLS[k]||'badge-gray'}">${STATUS_LABELS[k]||k}</span>`;
+}
+function pbadge(p){
+  return `<span class="badge ${PRIORITY_CLS[p]||'badge-gray'}"><span class="bd ${PRIORITY_DOT_CLS[p]||'bd-gray'}"></span>${p.charAt(0).toUpperCase()+p.slice(1)}</span>`;
+}
+function sbadge(s){
+  return `<span class="badge badge-gray">${MACRO_LABELS[s]||s}</span>`;
+}
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function enrich(r){
+  const e = Object.assign({},r);
+  if(!r.newSupplier){
+    e.supplierRegistrationRequired = false;
+    e.supplierRegistrationStatus = 'cadastro_concluido';
+  }
+  const n = daysFromToday(r.nextActionDate);
+  e.actionOverdue = n !== null && n < 0;
+  e.actionDaysN = n;
+  e.paymentOverdue = r.paymentStatus !== 'pago' && isOD(r.expectedPaymentDate);
+  e.followUpOverdue = r.followUpRequired && isOD(r.nextSupplierUpdateDate);
+  if(r.contractEndDate){
+    const d = daysFromToday(r.contractEndDate);
+    e.daysUntilExpiry = d;
+    e.nearExpiry = d >= 0 && d <= 90;
+    e.urgentExpiry = d >= 0 && d <= 30;
+  }
+  if(e.actionOverdue || r.paymentStatus==='atrasado' || r.homologationStatus==='bloqueada' || r.contractStatus==='bloqueado'){
+    e.risk = 'red';
+  } else if(r.priority==='urgente'){
+    e.risk = 'red';
+  } else if(r.priority==='alta' || (n !== null && n <= 3)){
+    e.risk = 'yellow';
+  } else if(r.priority==='media'){
+    e.risk = 'blue';
+  } else {
+    e.risk = 'green';
+  }
+  // current status for display
+  switch(r.macroStage){
+    case 'homologacao': e.currStatus = r.homologationStatus; break;
+    case 'contratacao':
+      if(r.supplierRegistrationRequired && r.supplierRegistrationStatus !== 'cadastro_concluido')
+        e.currStatus = r.supplierRegistrationStatus;
+      else e.currStatus = r.contractStatus;
+      break;
+    case 'prestacao_servico': e.currStatus = r.serviceStatus; break;
+    case 'faturamento':
+      if(r.migoRequired && r.migoStatus==='migo_pendente') e.currStatus='migo_pendente';
+      else if(r.invoicePortalStatus==='portal_pendente') e.currStatus='portal_pendente';
+      else if(r.poRequired && r.poStatus==='po_pendente') e.currStatus='po_pendente';
+      else if(r.invoiceReceived) e.currStatus='invoice_recebida';
+      else e.currStatus='aguardando_invoice';
+      break;
+    case 'pagamento': e.currStatus = r.paymentStatus; break;
+    default: e.currStatus = null;
+  }
+  return e;
+}
+
+function kpis(){
+  const R = RECORDS;
+  const E = R.map(enrich);
+  return {
+    emAndamento: R.filter(r=>r.paymentStatus!=='pago').length,
+    homologacoes: R.filter(r=>r.macroStage==='homologacao').length,
+    agAssinatura: R.filter(r=>r.contractStatus==='aguardando_assinatura_interna'||r.contractStatus==='aguardando_assinatura_fornecedor').length,
+    cadastroPend: R.filter(r=>r.newSupplier&&r.supplierRegistrationRequired&&r.supplierRegistrationStatus!=='cadastro_concluido').length,
+    invoicesAg: R.filter(r=>r.invoiceExpected&&!r.invoiceReceived).length,
+    posPend: R.filter(r=>r.poRequired&&r.poStatus!=='po_emitido'&&r.poStatus!=='nao_aplicavel').length,
+    migosPend: R.filter(r=>r.migoRequired&&r.migoStatus!=='migo_concluido'&&r.migoStatus!=='nao_aplicavel').length,
+    pgmtosPrev: R.filter(r=>r.paymentStatus==='programado').length,
+    pgmtosAtraso: E.filter(e=>e.paymentOverdue||e.paymentStatus==='atrasado').length,
+    renovacoes: E.filter(e=>e.nearExpiry).length,
+    // for badges
+    urgentActions: E.filter(e=>e.actionOverdue||e.priority==='urgente').length,
+    billingPend: R.filter(r=>r.macroStage==='faturamento').length,
+    renewalsAlerts: E.filter(e=>e.urgentExpiry).length,
+  };
+}
+
+function sortActions(rs){
+  return [...rs].map(enrich).sort((a,b)=>{
+    if(a.actionOverdue && !b.actionOverdue) return -1;
+    if(!a.actionOverdue && b.actionOverdue) return 1;
+    if(a.actionOverdue && b.actionOverdue){
+      return (a.actionDaysN||0)-(b.actionDaysN||0);
+    }
+    const pa = PRIORITY_ORDER[a.priority]??99;
+    const pb = PRIORITY_ORDER[b.priority]??99;
+    if(pa!==pb) return pa-pb;
+    if(a.nextActionDate && b.nextActionDate) return pd(a.nextActionDate)-pd(b.nextActionDate);
+    return 0;
+  });
+}
+
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+const STATE = { page:'overview', view:'operacional' };
+const PIPE_FILTERS = { search:'', area:'', owner:'', priority:'', overdueOnly:false, newSupplier:false };
+const BILL_FILTERS = { month:'' };
+const MACRO_ORDER = ['homologacao','contratacao','prestacao_servico','faturamento','pagamento'];
+const MACRO_DOTS = {
+  homologacao:'#8B5CF6', contratacao:'#3B82F6',
+  prestacao_servico:'#10B981', faturamento:'#F59E0B', pagamento:'#EC4899'
+};
+
+/* ═══════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════ */
+function navigate(page){
+  STATE.page = page;
+  // update sidebar links
+  document.querySelectorAll('.sb-link').forEach(el=>{
+    el.classList.toggle('active', el.dataset.page===page);
+  });
+  // update topbar title
+  const TITLES = {
+    overview:'Visão Geral', pipeline:'Pipeline Operacional',
+    billing:'Faturamento & Pagamentos', renewals:'Renovações'
+  };
+  document.getElementById('tb-title').textContent = TITLES[page]||'';
+  render();
+}
+
+function setView(v){
+  STATE.view = v;
+  document.getElementById('vt-op').classList.toggle('active', v==='operacional');
+  document.getElementById('vt-ld').classList.toggle('active', v==='lideranca');
+  render();
+}
+
+function render(){
+  const el = document.getElementById('page');
+  switch(STATE.page){
+    case 'overview':  el.innerHTML = renderOverview(); break;
+    case 'pipeline':  el.innerHTML = renderPipeline(); break;
+    case 'billing':   el.innerHTML = renderBilling(); break;
+    case 'renewals':  el.innerHTML = renderRenewals(); break;
+    default: el.innerHTML = '';
+  }
+}
+
+/* ═══════════════════════════════════════════
+   DRAWER
+═══════════════════════════════════════════ */
+function openDrawer(id){
+  const r = enrich(RECORDS.find(x=>x.id===id));
+  if(!r) return;
+  document.getElementById('dwr-sup').textContent = r.supplier;
+  document.getElementById('dwr-svc').textContent = r.service;
+  document.getElementById('dwr-meta').innerHTML =
+    sbadge(r.macroStage) +
+    badge(r.currStatus||r.homologationStatus) +
+    pbadge(r.priority);
+  document.getElementById('dwr-body').innerHTML = `
+    <p style="font-size:13px;color:var(--text-2);line-height:1.6">
+      Drawer de detalhe completo com checklist por etapa, timeline, histórico de comunicação e próxima ação será entregue na <strong>Etapa 4</strong>.
+    </p>
+    <div style="margin-top:16px;padding:12px 14px;background:var(--accent-soft);border:1px solid var(--accent-border);border-radius:var(--r-lg)">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:6px">Próxima Ação</div>
+      <div style="font-size:14px;font-weight:600;color:var(--text-1);margin-bottom:8px">${esc(r.nextAction)}</div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap">
+        <div><div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Responsável</div><div style="font-size:12.5px;font-weight:500;margin-top:2px">${esc(r.actionOwner)}</div></div>
+        <div><div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Prazo</div><div style="font-size:12.5px;font-weight:500;margin-top:2px${r.actionOverdue?';color:var(--red)':''}">${fmtDate(r.nextActionDate)}${r.actionOverdue?' ⚠':''}</div></div>
+        <div><div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Prioridade</div><div style="margin-top:2px">${pbadge(r.priority)}</div></div>
+      </div>
+    </div>
+    ${r.notes?`<div style="margin-top:14px;padding:10px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-md)"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:5px">Observações</div><div style="font-size:12.5px;color:var(--text-2)">${esc(r.notes)}</div></div>`:''}
+    <div style="margin-top:16px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:10px">Histórico de Comunicação</div>
+      ${(r.communicationHistory||[]).map(c=>`
+        <div style="display:flex;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:12px">
+          <div style="font-size:11px;color:var(--text-3);width:56px;flex-shrink:0;padding-top:1px">${fmtShort(c.date)}</div>
+          <div><div style="display:inline-block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:1px 7px;border-radius:3px;background:var(--accent-soft);color:var(--accent);margin-bottom:5px">${esc(c.type)}</div><div style="font-size:12.5px;color:var(--text-1)">${esc(c.summary)}</div></div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+}
+
+function closeDrawer(){
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+}
+
+/* ═══════════════════════════════════════════
+   OVERVIEW RENDERER
+═══════════════════════════════════════════ */
+function renderOverview(){
+  return STATE.view === 'operacional' ? renderOverviewOp() : renderOverviewLd();
+}
+
+function renderOverviewOp(){
+  const K = kpis();
+  const E = sortActions(RECORDS);
+  const blockers = RECORDS.map(enrich).filter(r=>
+    r.homologationStatus==='bloqueada' || r.contractStatus==='bloqueado' ||
+    r.paymentStatus==='atrasado' || r.poStatus==='bloqueado'
+  );
+  const payments7 = RECORDS.map(enrich).filter(r=>
+    r.paymentStatus==='programado' && r.expectedPaymentDate &&
+    daysFromToday(r.expectedPaymentDate) !== null && daysFromToday(r.expectedPaymentDate) <= 7 && daysFromToday(r.expectedPaymentDate) >= 0
+  );
+  const payments30 = RECORDS.map(enrich).filter(r=>
+    r.paymentStatus==='programado' && r.expectedPaymentDate &&
+    daysFromToday(r.expectedPaymentDate) !== null && daysFromToday(r.expectedPaymentDate) > 7 && daysFromToday(r.expectedPaymentDate) <= 30
+  );
+  const overduePayments = RECORDS.map(enrich).filter(r=>r.paymentOverdue || r.paymentStatus==='atrasado');
+  const followups = RECORDS.map(enrich).filter(r=>r.followUpRequired && (r.followUpOverdue || (r.nextSupplierUpdateDate && daysFromToday(r.nextSupplierUpdateDate)<=1)));
+
+  return `
+  <!-- KPI Grid -->
+  <div class="kpi-grid">
+    ${kpi('Em Andamento', K.emAndamento, '')}
+    ${kpi('Homologações',K.homologacoes,'blue')}
+    ${kpi('Ag. Assinatura',K.agAssinatura, K.agAssinatura>0?'yellow':'')}
+    ${kpi('Cadastros Pend.',K.cadastroPend, K.cadastroPend>0?'yellow':'')}
+    ${kpi('Invoices Ag.',K.invoicesAg, K.invoicesAg>0?'yellow':'')}
+    ${kpi('POs Pendentes',K.posPend, K.posPend>0?'yellow':'')}
+    ${kpi('MIGOs Pend.',K.migosPend, K.migosPend>0?'yellow':'')}
+    ${kpi('Pgmtos Previstos',K.pgmtosPrev,'blue')}
+    ${kpi('Pgmtos Atraso',K.pgmtosAtraso, K.pgmtosAtraso>0?'red':'')}
+    ${kpi('Renov. Próximas',K.renovacoes, K.renovacoes>0?'yellow':'')}
+  </div>
+
+  <!-- Two-column layout -->
+  <div class="ov-grid">
+    <!-- Left: next actions table -->
+    <div>
+      <div class="sec">
+        <div class="sec-hd">
+          <span class="sec-title">Minhas Próximas Ações</span>
+          <span class="sec-count">${E.length} contratações</span>
+        </div>
+        <div class="tw">
+          <table>
+            <thead><tr>
+              <th>Fornecedor</th>
+              <th>Etapa</th>
+              <th>Próxima Ação</th>
+              <th>Responsável</th>
+              <th>Prazo</th>
+              <th>Dias Ag.</th>
+              <th>Prioridade</th>
+            </tr></thead>
+            <tbody>
+            ${E.map(r=>{
+              const n = r.actionDaysN;
+              const overdueCls = r.actionOverdue ? 'row-overdue' : '';
+              const daysSinceUpd = r.lastUpdate ? Math.abs(Math.round((TODAY - pd(r.lastUpdate))/86400000)) : '—';
+              let daysTag = '';
+              if(n !== null){
+                if(n < 0) daysTag = `<span class="days-tag late">↑ ${Math.abs(n)}d atraso</span>`;
+                else if(n === 0) daysTag = `<span class="days-tag soon">Hoje</span>`;
+                else if(n <= 3) daysTag = `<span class="days-tag soon">Em ${n}d</span>`;
+                else daysTag = `<span class="days-tag">${fmtShort(r.nextActionDate)}</span>`;
+              }
+              return `<tr class="${overdueCls}" onclick="openDrawer(${r.id})">
+                <td><div class="td-sup">${esc(r.supplier)}</div><div class="td-svc">${esc(r.service)}</div></td>
+                <td>${sbadge(r.macroStage)}</td>
+                <td><div class="td-act">${esc(r.nextAction)}</div></td>
+                <td class="text-2">${esc(r.actionOwner)}</td>
+                <td>${daysTag}</td>
+                <td class="muted font-mono">${daysSinceUpd}d</td>
+                <td>${pbadge(r.priority)}</td>
+              </tr>`;
+            }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <div>
+      <!-- Blockers -->
+      <div class="sec">
+        <div class="sec-hd">
+          <span class="sec-title" style="color:var(--red)">⚠ Principais Bloqueios</span>
+          <span class="sec-count">${blockers.length}</span>
+        </div>
+        ${blockers.length === 0
+          ? `<div class="ov-card"><p class="text-muted" style="font-size:13px;text-align:center">Nenhum bloqueio no momento</p></div>`
+          : blockers.map(r=>`
+          <div class="blocker-row" onclick="openDrawer(${r.id})">
+            <div style="flex:1;min-width:0">
+              <div class="bl-sup">${esc(r.supplier)}</div>
+              <div class="bl-reason">${esc(r.nextAction)}</div>
+              <div style="margin-top:5px">${badge(r.currStatus)}</div>
+            </div>
+            ${pbadge(r.priority)}
+          </div>`).join('')
+        }
+      </div>
+
+      <!-- Upcoming payments -->
+      <div class="sec">
+        <div class="sec-hd"><span class="sec-title">Pagamentos Próximos</span></div>
+        ${overduePayments.length > 0 ? `
+          <div style="margin-bottom:6px;font-size:11px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:.06em">Em atraso</div>
+          ${overduePayments.map(r=>`
+          <div class="pay-row overdue" onclick="openDrawer(${r.id})">
+            <div class="pr-sup">${esc(r.supplier)}</div>
+            <div class="pr-val" style="color:var(--red)">${fmtCur(r.invoiceValue,r.currency)}</div>
+            <div class="pr-date" style="color:var(--red)">${fmtShort(r.expectedPaymentDate)}</div>
+          </div>`).join('')}
+          <div style="margin-top:10px;margin-bottom:6px;font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Próximos 7 dias</div>
+        ` : `<div style="margin-bottom:6px;font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Próximos 7 dias</div>`}
+        ${payments7.length === 0 ? `<div style="font-size:12px;color:var(--text-3);padding:8px 0">Nenhum</div>` :
+          payments7.map(r=>`<div class="pay-row" onclick="openDrawer(${r.id})">
+            <div class="pr-sup">${esc(r.supplier)}</div>
+            <div class="pr-val">${fmtCur(r.invoiceValue,r.currency)}</div>
+            <div class="pr-date">${fmtShort(r.expectedPaymentDate)}</div>
+          </div>`).join('')}
+        <div style="margin-top:10px;margin-bottom:6px;font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Próximos 30 dias</div>
+        ${payments30.length === 0 ? `<div style="font-size:12px;color:var(--text-3);padding:8px 0">Nenhum</div>` :
+          payments30.map(r=>`<div class="pay-row" onclick="openDrawer(${r.id})">
+            <div class="pr-sup">${esc(r.supplier)}</div>
+            <div class="pr-val">${fmtCur(r.invoiceValue,r.currency)}</div>
+            <div class="pr-date">${fmtShort(r.expectedPaymentDate)}</div>
+          </div>`).join('')}
+      </div>
+
+      <!-- Follow-ups -->
+      <div class="sec">
+        <div class="sec-hd">
+          <span class="sec-title">Follow-ups com Fornecedores</span>
+          <span class="sec-count">${followups.length}</span>
+        </div>
+        ${followups.length === 0
+          ? `<div class="ov-card"><p class="text-muted" style="font-size:13px;text-align:center">Nenhum follow-up pendente</p></div>`
+          : followups.map(r=>{
+            const n = daysFromToday(r.nextSupplierUpdateDate);
+            const isLate = n !== null && n < 0;
+            return `<div class="fu-row ${isLate?'late':''}" onclick="openDrawer(${r.id})">
+              <div>
+                <div class="fu-sup">${esc(r.supplier)}</div>
+                <div style="font-size:11px;color:var(--text-3);margin-top:2px">${esc(r.lastSupplierContactSummary||'')}</div>
+              </div>
+              <div class="fu-date ${isLate?'late':'due'}">${isLate ? `↑ ${Math.abs(n)}d atr.` : (n===0 ? 'Hoje' : `${fmtShort(r.nextSupplierUpdateDate)}`)}</div>
+            </div>`;
+          }).join('')
+        }
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderOverviewLd(){
+  const K = kpis();
+  const E = RECORDS.map(enrich);
+  const stageGroups = ['homologacao','contratacao','prestacao_servico','faturamento','pagamento'];
+  const totalValue = RECORDS.reduce((s,r)=>s+(r.contractValue||0),0);
+  const pendingValue = RECORDS.filter(r=>r.paymentStatus!=='pago').reduce((s,r)=>s+(r.invoiceValue||0),0);
+  const overdueValue = E.filter(e=>e.paymentOverdue||e.paymentStatus==='atrasado').reduce((s,r)=>s+(r.invoiceValue||0),0);
+  const blockedCount = E.filter(r=>r.homologationStatus==='bloqueada'||r.contractStatus==='bloqueado'||r.paymentStatus==='atrasado').length;
+  const counts = stageGroups.map(s=>RECORDS.filter(r=>r.macroStage===s).length);
+  const maxCount = Math.max(...counts,1);
+
+  return `
+  <div class="leader-kpi-grid">
+    ${lkpi('Contratações Ativas', K.emAndamento, '')}
+    ${lkpi('Valor Total Contratado', fmtCur(totalValue,'BRL'), 'blue', 'em contratos ativos')}
+    ${lkpi('Valor Ag. Pagamento', fmtCur(pendingValue,'BRL'), K.pgmtosAtraso>0?'yellow':'', 'em invoices abertas')}
+    ${lkpi('Valor em Atraso', fmtCur(overdueValue,'BRL'), overdueValue>0?'red':'green', 'pagamentos não liquidados')}
+    ${lkpi('Contratos Bloqueados', blockedCount, blockedCount>0?'red':'green')}
+    ${lkpi('Renovações Próximas', K.renovacoes, K.renovacoes>0?'yellow':'', 'nos próximos 90 dias')}
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+    <div class="stage-bar">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:12px">Distribuição por Etapa</div>
+      ${stageGroups.map((s,i)=>`
+        <div class="sb-stage-row">
+          <div class="sbs-name">${MACRO_LABELS[s]}</div>
+          <div class="sbs-bar-wrap"><div class="sbs-bar" style="width:${Math.round(counts[i]/maxCount*100)}%"></div></div>
+          <div class="sbs-cnt">${counts[i]}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div>
+      <div class="ov-card" style="margin-bottom:12px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:10px">Contratações Bloqueadas</div>
+        ${E.filter(r=>r.homologationStatus==='bloqueada'||r.contractStatus==='bloqueado'||r.paymentStatus==='atrasado').map(r=>`
+          <div class="blocker-row" onclick="openDrawer(${r.id})">
+            <div style="flex:1;min-width:0"><div class="bl-sup">${esc(r.supplier)}</div><div class="bl-reason">${badge(r.currStatus)}</div></div>
+          </div>`).join('') || '<p class="text-muted" style="font-size:13px">Nenhum bloqueio</p>'}
+      </div>
+      <div class="ov-card">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);margin-bottom:10px">Renovações em Risco</div>
+        ${E.filter(e=>e.nearExpiry).sort((a,b)=>(a.daysUntilExpiry||999)-(b.daysUntilExpiry||999)).map(r=>`
+          <div class="pay-row ${r.urgentExpiry?'overdue':''}" onclick="openDrawer(${r.id})" style="margin-bottom:6px">
+            <div class="pr-sup">${esc(r.supplier)}</div>
+            <div class="pr-date ${r.urgentExpiry?'':''}">
+              ${r.daysUntilExpiry <= 30 ? `<span style="color:var(--red);font-weight:600">Em ${r.daysUntilExpiry}d</span>` : `Em ${r.daysUntilExpiry}d`}
+            </div>
+          </div>`).join('') || '<p class="text-muted" style="font-size:13px">Nenhuma renovação próxima</p>'}
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sec-title">Resumo por Responsável</span></div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Responsável</th><th>Contratações</th><th>Urgentes / Atrasadas</th><th>Em Andamento</th><th>Bloqueadas</th></tr></thead>
+        <tbody>
+        ${['Ana Lima','Pedro Souza'].map(owner=>{
+          const mine = E.filter(r=>r.internalOwner===owner);
+          const urg = mine.filter(r=>r.priority==='urgente'||r.actionOverdue).length;
+          const active = mine.filter(r=>r.paymentStatus!=='pago').length;
+          const blocked = mine.filter(r=>r.homologationStatus==='bloqueada'||r.contractStatus==='bloqueado'||r.paymentStatus==='atrasado').length;
+          return `<tr>
+            <td class="fw-600">${owner}</td>
+            <td>${mine.length}</td>
+            <td>${urg > 0 ? `<span style="color:var(--red);font-weight:600">${urg}</span>` : '0'}</td>
+            <td>${active}</td>
+            <td>${blocked > 0 ? `<span style="color:var(--red);font-weight:600">${blocked}</span>` : '0'}</td>
+          </tr>`;
+        }).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function kpi(label, val, cls){
+  return `<div class="kpi"><div class="kpi-label">${label}</div><div class="kpi-val ${cls}">${val}</div></div>`;
+}
+function lkpi(label, val, cls, sub=''){
+  return `<div class="leader-kpi"><div class="lkpi-label">${label}</div><div class="lkpi-val ${cls}">${val}</div>${sub?`<div class="lkpi-sub">${sub}</div>`:''}</div>`;
+}
+
+/* ═══════════════════════════════════════════
+   PIPELINE PAGE (Etapa 2)
+═══════════════════════════════════════════ */
+function applyPipeFilters(records){
+  const f = PIPE_FILTERS;
+  const q = f.search.toLowerCase();
+  return records.filter(r=>{
+    if(q && !r.supplier.toLowerCase().includes(q) && !(r.service||'').toLowerCase().includes(q)) return false;
+    if(f.area && r.businessArea!==f.area) return false;
+    if(f.owner && r.internalOwner!==f.owner) return false;
+    if(f.priority && r.priority!==f.priority) return false;
+    if(f.overdueOnly && !r.actionOverdue && !r.paymentOverdue && !r.followUpOverdue) return false;
+    if(f.newSupplier && !r.newSupplier) return false;
+    return true;
+  });
+}
+
+function renderPipelineBoardHTML(allRecords){
+  const filtered = applyPipeFilters(allRecords);
+  const isLd = STATE.view==='lideranca';
+  const cols = MACRO_ORDER.map(stage=>{
+    const cards = filtered.filter(r=>r.macroStage===stage);
+    const label = MACRO_LABELS[stage];
+    const dot = MACRO_DOTS[stage];
+    const totalVal = isLd ? cards.reduce((s,r)=>s+(r.contractValue||0),0) : 0;
+    const cardHTML = cards.map(r=>{
+      const riskCls = r.risk||'gray';
+      const dl = r.nextActionDate ? daysFromToday(r.nextActionDate) : null;
+      const dlCls = dl!==null ? (dl<0?'late':dl<=3?'soon':'') : '';
+      const dlLabel = dl!==null ? (dl<0 ? `${Math.abs(dl)}d atr.` : dl===0 ? 'Hoje' : `${dl}d`) : '';
+      return `<div class="kanban-card" onclick="openDrawer(${r.id})">
+        <div class="kc-stripe ${riskCls}"></div>
+        <div class="kc-body">
+          <div class="kc-sup">${esc(r.supplier)}</div>
+          <div class="kc-svc">${esc(r.service)}</div>
+          <div class="kc-status">${badge(r.currStatus)}</div>
+          ${r.nextAction ? `<div class="kc-action">${esc(r.nextAction)}</div>` : ''}
+          <div class="kc-foot">
+            <span class="kc-owner">${esc(r.actionOwner||'—')}</span>
+            ${dlLabel ? `<span class="kc-deadline ${dlCls}">${dlLabel}</span>` : ''}
+            ${r.priority&&r.priority!=='baixa' ? pbadge(r.priority) : ''}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+    return `<div class="kanban-col">
+      <div class="kanban-col-hd">
+        <span class="kch-dot" style="background:${dot}"></span>
+        <span class="kch-name">${label}</span>
+        <span class="kch-count">${cards.length}</span>
+      </div>
+      ${isLd && totalVal>0 ? `<div class="kch-sub">${fmtCur(totalVal,'BRL')}</div>` : ''}
+      <div class="kanban-cards">${cardHTML || '<div style="padding:16px 12px;font-size:12px;color:var(--text-3);text-align:center">Nenhum contrato</div>'}</div>
+    </div>`;
+  }).join('');
+  return `<div class="kanban-wrap"><div class="kanban-board">${cols}</div></div>`;
+}
+
+function renderPipelineBoard(){
+  const allRecords = RECORDS.map(enrich);
+  const wrap = document.getElementById('pipeline-board-wrap');
+  if(wrap) wrap.innerHTML = renderPipelineBoardHTML(allRecords);
+  const el = document.getElementById('pipe-count');
+  if(el) el.textContent = `${applyPipeFilters(allRecords).length} de ${allRecords.length} contratos`;
+}
+
+function renderPipeline(){
+  const allRecords = RECORDS.map(enrich);
+  const areas = [...new Set(allRecords.map(r=>r.businessArea).filter(Boolean))].sort();
+  const owners = [...new Set(allRecords.map(r=>r.internalOwner).filter(Boolean))].sort();
+  const filtCount = applyPipeFilters(allRecords).length;
+  return `
+    <div class="filter-bar">
+      <input type="text" placeholder="Buscar fornecedor ou serviço…"
+        value="${esc(PIPE_FILTERS.search)}"
+        oninput="PIPE_FILTERS.search=this.value;renderPipelineBoard()">
+      <select class="fb-select" onchange="PIPE_FILTERS.area=this.value;renderPipelineBoard()">
+        <option value="">Todas as áreas</option>
+        ${areas.map(a=>`<option value="${esc(a)}"${PIPE_FILTERS.area===a?' selected':''}>${esc(a)}</option>`).join('')}
+      </select>
+      <select class="fb-select" onchange="PIPE_FILTERS.owner=this.value;renderPipelineBoard()">
+        <option value="">Todos os responsáveis</option>
+        ${owners.map(o=>`<option value="${esc(o)}"${PIPE_FILTERS.owner===o?' selected':''}>${esc(o)}</option>`).join('')}
+      </select>
+      <select class="fb-select" onchange="PIPE_FILTERS.priority=this.value;renderPipelineBoard()">
+        <option value="">Todas as prioridades</option>
+        <option value="urgente"${PIPE_FILTERS.priority==='urgente'?' selected':''}>Urgente</option>
+        <option value="alta"${PIPE_FILTERS.priority==='alta'?' selected':''}>Alta</option>
+        <option value="media"${PIPE_FILTERS.priority==='media'?' selected':''}>Média</option>
+        <option value="baixa"${PIPE_FILTERS.priority==='baixa'?' selected':''}>Baixa</option>
+      </select>
+      <div class="filter-sep"></div>
+      <label class="filter-toggle">
+        <input type="checkbox"${PIPE_FILTERS.overdueOnly?' checked':''}
+          onchange="PIPE_FILTERS.overdueOnly=this.checked;renderPipelineBoard()">
+        Apenas atrasados
+      </label>
+      <label class="filter-toggle">
+        <input type="checkbox"${PIPE_FILTERS.newSupplier?' checked':''}
+          onchange="PIPE_FILTERS.newSupplier=this.checked;renderPipelineBoard()">
+        Novo fornecedor
+      </label>
+      <span class="filter-count" id="pipe-count">${filtCount} de ${allRecords.length} contratos</span>
+    </div>
+    <div id="pipeline-board-wrap">${renderPipelineBoardHTML(allRecords)}</div>
+  `;
+}
+
+/* ═══════════════════════════════════════════
+   BILLING PAGE (Etapa 3)
+═══════════════════════════════════════════ */
+function renderBilling(){
+  const allRecs = RECORDS.map(enrich);
+  const billRecs = allRecs.filter(r=>
+    r.invoiceExpected||r.invoiceReceived||r.macroStage==='faturamento'||r.macroStage==='pagamento'
+  );
+  const months = [...new Set(billRecs.map(r=>{
+    if(!r.expectedPaymentDate) return null;
+    const d = pd(r.expectedPaymentDate);
+    if(!d) return null;
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+  }).filter(Boolean))].sort();
+  const filtered = BILL_FILTERS.month
+    ? billRecs.filter(r=>{
+        const d = pd(r.expectedPaymentDate);
+        if(!d) return false;
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`===BILL_FILTERS.month;
+      })
+    : billRecs;
+  filtered.sort((a,b)=>{
+    if(a.paymentOverdue&&!b.paymentOverdue) return -1;
+    if(!a.paymentOverdue&&b.paymentOverdue) return 1;
+    const da=pd(a.expectedPaymentDate),db=pd(b.expectedPaymentDate);
+    if(da&&db) return da-db;
+    return 0;
+  });
+  const totalPend = billRecs.filter(r=>r.paymentStatus!=='pago').reduce((s,r)=>s+(r.invoiceValue||0),0);
+  const overdueVal = billRecs.filter(r=>r.paymentOverdue).reduce((s,r)=>s+(r.invoiceValue||0),0);
+  const next30Val = billRecs.filter(r=>{
+    if(r.paymentStatus==='pago') return false;
+    const d=daysFromToday(r.expectedPaymentDate);
+    return d!==null&&d>=0&&d<=30;
+  }).reduce((s,r)=>s+(r.invoiceValue||0),0);
+  const posPend = billRecs.filter(r=>r.poRequired&&r.poStatus!=='emitido'&&r.poStatus!=='n/a').length;
+  const migosPend = billRecs.filter(r=>r.migoRequired&&r.migoStatus!=='confirmado'&&r.migoStatus!=='n/a').length;
+  const portalPend = billRecs.filter(r=>r.invoicePortalStatus==='pendente'||r.invoicePortalStatus==='portal_pendente').length;
+  const fmtMonth = ym=>{
+    const [y,m] = ym.split('-');
+    return ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'][parseInt(m)-1]+' '+y;
+  };
+  const stepBadge = (cond,ok,pend,na)=>{
+    if(!cond) return `<span class="step-badge step-na">${na}</span>`;
+    return cond==='ok'
+      ? `<span class="step-badge step-ok">${ok}</span>`
+      : `<span class="step-badge step-pend">${pend}</span>`;
+  };
+  const rows = filtered.map(r=>{
+    const isOvd = r.paymentOverdue;
+    const poCond = !r.poRequired ? null : r.poStatus==='emitido'?'ok':'pend';
+    const migoCond = !r.migoRequired ? null : r.migoStatus==='confirmado'?'ok':'pend';
+    const portalCond = r.invoicePortalStatus==='enviado'?'ok':r.invoicePortalStatus==='pendente'||r.invoicePortalStatus==='portal_pendente'?'pend':null;
+    let payBadge;
+    if(r.paymentStatus==='pago') payBadge='<span class="badge badge-green">Pago</span>';
+    else if(r.paymentOverdue) payBadge='<span class="badge badge-red">Atrasado</span>';
+    else if(r.paymentStatus==='programado') payBadge='<span class="badge badge-blue">Programado</span>';
+    else payBadge='<span class="badge badge-yellow">Pendente</span>';
+    return `<tr class="${isOvd?'row-overdue':''}" onclick="openDrawer(${r.id})">
+      <td><div class="td-sup">${esc(r.supplier)}</div><div class="td-svc">${esc(r.service)}</div></td>
+      <td class="muted font-mono">${r.invoiceNumber?esc(r.invoiceNumber):'—'}</td>
+      <td class="r font-mono">${r.invoiceValue?fmtCur(r.invoiceValue,r.currency||'BRL'):'—'}</td>
+      <td>${r.invoiceReceived?'<span class="badge badge-green">Recebida</span>':r.invoiceExpected?'<span class="badge badge-yellow">Aguardada</span>':'<span class="badge badge-gray">—</span>'}</td>
+      <td>${stepBadge(poCond,'PO OK','PO pend.','Sem PO')}</td>
+      <td>${stepBadge(migoCond,'MIGO OK','MIGO pend.','Sem MIGO')}</td>
+      <td>${stepBadge(portalCond,'Portal OK','Portal pend.','N/A')}</td>
+      <td class="font-mono">${fmtDate(r.expectedPaymentDate)||'—'}</td>
+      <td>${payBadge}</td>
+    </tr>`;
+  }).join('');
+  return `
+    <div class="kpi-grid" style="margin-bottom:20px">
+      ${kpi('Valor Pendente', totalPend>0?fmtCur(totalPend,'BRL'):'—', totalPend>0?'yellow':'')}
+      ${kpi('Próx. 30 dias', next30Val>0?fmtCur(next30Val,'BRL'):'—', '')}
+      ${kpi('Em Atraso', overdueVal>0?fmtCur(overdueVal,'BRL'):'—', overdueVal>0?'red':'green')}
+      ${kpi('POs Pendentes', posPend, posPend>0?'yellow':'green')}
+      ${kpi('MIGOs Pend.', migosPend, migosPend>0?'yellow':'green')}
+      ${kpi('Portais Pend.', portalPend, portalPend>0?'yellow':'green')}
+    </div>
+    <div class="bill-filter">
+      <label>Filtrar por mês:</label>
+      <select class="fb-select" onchange="BILL_FILTERS.month=this.value;render()">
+        <option value="">Todos os meses</option>
+        ${months.map(m=>`<option value="${m}"${BILL_FILTERS.month===m?' selected':''}>${fmtMonth(m)}</option>`).join('')}
+      </select>
+      <span style="font-size:11.5px;color:var(--text-3)">${filtered.length} registro${filtered.length!==1?'s':''}</span>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr>
+          <th>Fornecedor</th>
+          <th>Nota Fiscal</th>
+          <th class="r">Valor</th>
+          <th>Invoice</th>
+          <th>PO</th>
+          <th>MIGO</th>
+          <th>Portal</th>
+          <th>Pgto Previsto</th>
+          <th>Status</th>
+        </tr></thead>
+        <tbody>${rows||'<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--text-3)">Nenhum registro</td></tr>'}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════
+   RENEWALS PAGE (Etapa 3)
+═══════════════════════════════════════════ */
+function renderRenewals(){
+  const allRecs = RECORDS.map(enrich);
+  const renewRecs = allRecs.filter(r=>
+    r.contractRequired && r.contractEndDate &&
+    r.renewalStatus!=='renovado' && r.renewalStatus!=='encerrado'
+  );
+  const GROUPS = [
+    {key:'u30', label:'Vence em até 30 dias',  cls:'rgh-red',    tcls:'red',    max:30},
+    {key:'u60', label:'Vence em 31–60 dias',    cls:'rgh-orange', tcls:'orange', max:60},
+    {key:'u90', label:'Vence em 61–90 dias',    cls:'rgh-yellow', tcls:'yellow', max:90},
+    {key:'far', label:'Vence em mais de 90 dias', cls:'rgh-gray', tcls:'gray',   max:Infinity},
+  ];
+  const grouped = {};
+  GROUPS.forEach(g=>grouped[g.key]=[]);
+  renewRecs.forEach(r=>{
+    const d = daysFromToday(r.contractEndDate);
+    if(d===null||d>90) grouped.far.push(r);
+    else if(d<=30) grouped.u30.push(r);
+    else if(d<=60) grouped.u60.push(r);
+    else grouped.u90.push(r);
+  });
+  Object.values(grouped).forEach(arr=>arr.sort((a,b)=>{
+    const da=pd(a.contractEndDate),db=pd(b.contractEndDate);
+    return da&&db ? da-db : 0;
+  }));
+  const renewBadgeMap = {
+    em_negociacao:'<span class="badge badge-blue">Em negociação</span>',
+    em_analise:'<span class="badge badge-yellow">Em análise</span>',
+    nao_iniciado:'<span class="badge badge-gray">Não iniciado</span>',
+    renovado:'<span class="badge badge-green">Renovado</span>',
+    encerrado:'<span class="badge badge-gray">Encerrado</span>',
+  };
+  const html = GROUPS.map(g=>{
+    const recs = grouped[g.key];
+    if(!recs.length) return '';
+    const rows = recs.map(r=>{
+      const days = daysFromToday(r.contractEndDate);
+      const dayCls = days!==null&&days<=30?'style="color:var(--red);font-weight:650"':days!==null&&days<=60?'style="color:var(--orange)"':'';
+      const ren = renewBadgeMap[r.renewalStatus] || badge(r.renewalStatus||'nao_iniciado');
+      return `<tr onclick="openDrawer(${r.id})">
+        <td><div class="td-sup">${esc(r.supplier)}</div><div class="td-svc">${esc(r.service)}</div></td>
+        <td class="font-mono">${fmtDate(r.contractEndDate)||'—'}</td>
+        <td class="r font-mono" ${dayCls}>${days!==null?days+'d':'—'}</td>
+        <td>${r.autoRenewal?'<span class="badge badge-green">Auto</span>':'<span class="badge badge-gray">Manual</span>'}</td>
+        <td>${ren}</td>
+        <td class="r font-mono">${r.contractValue?fmtCur(r.contractValue,'BRL'):'—'}</td>
+        <td class="td-act">${esc(r.nextAction||'—')}</td>
+      </tr>`;
+    }).join('');
+    return `<div class="renewal-group">
+      <div class="renewal-group-hd ${g.cls}">
+        <span class="rgh-title ${g.tcls}">${g.label}</span>
+        <span class="rgh-count">${recs.length} contrato${recs.length!==1?'s':''}</span>
+      </div>
+      <div class="tw">
+        <table>
+          <thead><tr>
+            <th>Fornecedor</th>
+            <th>Vencimento</th>
+            <th class="r">Dias</th>
+            <th>Renovação</th>
+            <th>Status</th>
+            <th class="r">Valor Anual</th>
+            <th>Próxima Ação</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }).filter(Boolean).join('');
+  return html || '<div class="empty"><p>Nenhum contrato com renovação pendente.</p></div>';
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+(function init(){
+  // Update sidebar badges
+  const K = kpis();
+  const bov = document.getElementById('badge-overview');
+  const bbl = document.getElementById('badge-billing');
+  const brn = document.getElementById('badge-renewals');
+  if(K.urgentActions > 0) bov.textContent = K.urgentActions;
+  else bov.style.display = 'none';
+  if(K.billingPend > 0) bbl.textContent = K.billingPend;
+  else bbl.style.display = 'none';
+  if(K.renewalsAlerts > 0) brn.textContent = K.renewalsAlerts;
+  else brn.style.display = 'none';
+  render();
+})();
+</script>
