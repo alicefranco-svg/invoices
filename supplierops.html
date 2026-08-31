@@ -345,6 +345,36 @@ details.dwr-sec[open] summary{border-bottom:1px solid var(--border);background:v
 .comm-summary{font-size:12.5px;color:var(--text-1);line-height:1.5}
 
 .sec-sep{height:1px;background:var(--border);margin:14px 0}
+
+/* ─── NEW CONTRACT MODAL ─────────────── */
+#nc-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
+#nc-overlay.open{display:flex}
+#nc-modal{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh-xl);width:100%;max-width:660px;max-height:calc(100vh - 48px);display:flex;flex-direction:column;overflow:hidden}
+.nc-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.nc-title{font-size:15px;font-weight:700;color:var(--text-1);letter-spacing:-.01em}
+.nc-close{width:28px;height:28px;border-radius:var(--r-md);border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-3);transition:background .1s}
+.nc-close:hover{background:var(--surface-2);color:var(--text-1)}
+.nc-body{overflow-y:auto;padding:20px;flex:1}
+.nc-section{margin-bottom:22px}
+.nc-section:last-child{margin-bottom:0}
+.nc-section-title{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.nc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.nc-field{display:flex;flex-direction:column;gap:4px}
+.nc-field.span2{grid-column:1/-1}
+.nc-label{font-size:11px;font-weight:600;color:var(--text-2);letter-spacing:.01em}
+.nc-label .req{color:var(--red);margin-left:2px}
+.nc-input,.nc-select{height:32px;padding:0 10px;border:1px solid var(--border-strong);border-radius:var(--r-md);background:var(--bg);color:var(--text-1);font-size:13px;font-family:inherit;outline:none;transition:border .12s;width:100%}
+.nc-select{padding-right:28px;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238896A9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
+.nc-input:focus,.nc-select:focus{border-color:var(--accent)}
+.nc-input[type=date]{color-scheme:light dark}
+.nc-input[type=number]{font-variant-numeric:tabular-nums}
+.nc-textarea{padding:8px 10px;border:1px solid var(--border-strong);border-radius:var(--r-md);background:var(--bg);color:var(--text-1);font-size:13px;font-family:inherit;outline:none;resize:vertical;min-height:72px;width:100%;transition:border .12s;line-height:1.5}
+.nc-textarea:focus{border-color:var(--accent)}
+.nc-chk-row{display:flex;align-items:center;gap:8px;height:32px}
+.nc-chk-row input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px;cursor:pointer;flex-shrink:0}
+.nc-chk-label{font-size:13px;color:var(--text-1);cursor:pointer;user-select:none}
+.nc-ft{padding:14px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-shrink:0;background:var(--surface-2)}
+.nc-err{color:var(--red);font-size:12px;flex:1;padding-right:12px;line-height:1.4}
 </style>
 
 <!-- ───────────────── APP SHELL ───────────────── -->
@@ -391,13 +421,183 @@ details.dwr-sec[open] summary{border-bottom:1px solid var(--border);background:v
     <header id="topbar">
       <span id="tb-title">Visão Geral</span>
       <div class="tb-right">
-        <button class="btn btn-ghost" style="font-size:12px;color:var(--text-3)" onclick="alert('Próximas etapas incluirão formulário de nova contratação.')">
+        <button class="btn btn-primary" onclick="openNewContractModal()">
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           Nova Contratação
         </button>
       </div>
     </header>
     <div id="page"></div>
+  </div>
+</div>
+
+<!-- ───────── NEW CONTRACT MODAL ───────── -->
+<div id="nc-overlay" onclick="ncOverlayClick(event)">
+  <div id="nc-modal">
+    <div class="nc-hd">
+      <span class="nc-title">Nova Contratação</span>
+      <button class="nc-close" onclick="closeNewContractModal()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="nc-body">
+      <!-- Bloco 1: Informações Básicas -->
+      <div class="nc-section">
+        <div class="nc-section-title">Informações Básicas</div>
+        <div class="nc-grid">
+          <div class="nc-field span2">
+            <label class="nc-label" for="nc-supplier">Fornecedor<span class="req">*</span></label>
+            <input class="nc-input" id="nc-supplier" type="text" placeholder="Nome do fornecedor">
+          </div>
+          <div class="nc-field span2">
+            <label class="nc-label" for="nc-service">Serviço<span class="req">*</span></label>
+            <input class="nc-input" id="nc-service" type="text" placeholder="Descrição do serviço contratado">
+          </div>
+          <div class="nc-field">
+            <label class="nc-label" for="nc-area">Área<span class="req">*</span></label>
+            <input class="nc-input" id="nc-area" type="text" placeholder="ex: Financeiro, RH, TI">
+          </div>
+          <div class="nc-field">
+            <label class="nc-label" for="nc-contract-type">Tipo de Contratação</label>
+            <select class="nc-select" id="nc-contract-type">
+              <option value="novo_contrato">Novo Contrato</option>
+              <option value="aditivo">Aditivo</option>
+              <option value="renovacao">Renovação</option>
+              <option value="po_simplificado">PO / Simplificado</option>
+              <option value="sem_contrato">Sem Contrato</option>
+            </select>
+          </div>
+          <div class="nc-field">
+            <label class="nc-label" for="nc-business-owner">Business Owner</label>
+            <input class="nc-input" id="nc-business-owner" type="text" placeholder="Nome do responsável de negócio">
+          </div>
+          <div class="nc-field">
+            <label class="nc-label" for="nc-internal-owner">Responsável Interno</label>
+            <input class="nc-input" id="nc-internal-owner" type="text" placeholder="Nome do gestor interno">
+          </div>
+          <div class="nc-field">
+            <div class="nc-chk-row">
+              <input type="checkbox" id="nc-international">
+              <label class="nc-chk-label" for="nc-international">Fornecedor Internacional</label>
+            </div>
+          </div>
+          <div class="nc-field">
+            <div class="nc-chk-row">
+              <input type="checkbox" id="nc-new-supplier" onchange="ncToggleRegistration()">
+              <label class="nc-chk-label" for="nc-new-supplier">Novo Fornecedor</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Bloco 2: Homologação / Contrato -->
+      <div class="nc-section">
+        <div class="nc-section-title">Homologação / Contrato</div>
+        <div class="nc-grid">
+          <div class="nc-field">
+            <label class="nc-label" for="nc-hom-status">Status Homologação</label>
+            <select class="nc-select" id="nc-hom-status">
+              <option value="nao_iniciada">Não iniciada</option>
+              <option value="aguardando_documentos">Aguardando documentos</option>
+              <option value="em_analise">Em análise</option>
+              <option value="aguardando_fornecedor">Aguardando fornecedor</option>
+              <option value="homologacao_concluida">Homologação concluída</option>
+              <option value="bloqueada">Bloqueada</option>
+            </select>
+          </div>
+          <div class="nc-field" style="justify-content:flex-end">
+            <div class="nc-chk-row">
+              <input type="checkbox" id="nc-contract-required">
+              <label class="nc-chk-label" for="nc-contract-required">Contrato Necessário</label>
+            </div>
+          </div>
+          <div class="nc-field">
+            <label class="nc-label" for="nc-contract-status">Status Contrato</label>
+            <select class="nc-select" id="nc-contract-status">
+              <option value="nao_necessario">Não necessário</option>
+              <option value="solicitacao_pendente">Solicitação pendente</option>
+              <option value="contrato_solicitado">Contrato solicitado</option>
+              <option value="em_elaboracao">Em elaboração</option>
+              <option value="em_negociacao">Em negociação</option>
+              <option value="aguardando_assinatura_interna">Ag. assinatura interna</option>
+              <option value="aguardando_assinatura_fornecedor">Ag. assinatura fornecedor</option>
+              <option value="assinatura_concluida">Assinado</option>
+            </select>
+          </div>
+          <div class="nc-field">
+            <label class="nc-label" for="nc-contract-end">Vencimento Contrato</label>
+            <input class="nc-input" id="nc-contract-end" type="date">
+          </div>
+          <div class="nc-field">
+            <label class="nc-label" for="nc-contract-value">Valor Contratado</label>
+            <input class="nc-input" id="nc-contract-value" type="number" min="0" step="0.01" placeholder="0">
+          </div>
+          <div class="nc-field">
+            <label class="nc-label" for="nc-currency">Moeda</label>
+            <select class="nc-select" id="nc-currency">
+              <option value="BRL">BRL — Real</option>
+              <option value="USD">USD — Dólar</option>
+              <option value="EUR">EUR — Euro</option>
+            </select>
+          </div>
+          <div class="nc-field" id="nc-registration-wrap" style="display:none">
+            <div class="nc-chk-row">
+              <input type="checkbox" id="nc-registration-required">
+              <label class="nc-chk-label" for="nc-registration-required">Cadastro Necessário</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Bloco 3: Operação -->
+      <div class="nc-section">
+        <div class="nc-section-title">Operação</div>
+        <div class="nc-grid">
+          <div class="nc-field">
+            <label class="nc-label" for="nc-macro">Macroetapa<span class="req">*</span></label>
+            <select class="nc-select" id="nc-macro">
+              <option value="homologacao">Homologação</option>
+              <option value="contratacao">Contratação</option>
+              <option value="prestacao_servico">Prestação do Serviço</option>
+              <option value="faturamento">Faturamento</option>
+              <option value="pagamento">Pagamento</option>
+            </select>
+          </div>
+          <div class="nc-field">
+            <label class="nc-label" for="nc-priority">Prioridade</label>
+            <select class="nc-select" id="nc-priority">
+              <option value="media">Média</option>
+              <option value="baixa">Baixa</option>
+              <option value="alta">Alta</option>
+              <option value="urgente">Urgente</option>
+            </select>
+          </div>
+          <div class="nc-field span2">
+            <label class="nc-label" for="nc-next-action">Próxima Ação<span class="req">*</span></label>
+            <input class="nc-input" id="nc-next-action" type="text" placeholder="Descreva a próxima ação necessária">
+          </div>
+          <div class="nc-field">
+            <label class="nc-label" for="nc-action-owner">Responsável pela Ação</label>
+            <input class="nc-input" id="nc-action-owner" type="text" placeholder="Nome do responsável">
+          </div>
+          <div class="nc-field">
+            <label class="nc-label" for="nc-action-date">Data Próxima Ação</label>
+            <input class="nc-input" id="nc-action-date" type="date">
+          </div>
+          <div class="nc-field span2">
+            <label class="nc-label" for="nc-dependency">Dependência</label>
+            <input class="nc-input" id="nc-dependency" type="text" placeholder="ex: Área de Compras, Jurídico">
+          </div>
+          <div class="nc-field span2">
+            <label class="nc-label" for="nc-notes">Observações</label>
+            <textarea class="nc-textarea" id="nc-notes" placeholder="Contexto adicional sobre a contratação…"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nc-ft">
+      <span class="nc-err" id="nc-err"></span>
+      <button class="btn btn-secondary" onclick="closeNewContractModal()">Cancelar</button>
+      <button class="btn btn-primary" id="nc-save-btn" onclick="submitNewContract()">Salvar</button>
+    </div>
   </div>
 </div>
 
@@ -1993,6 +2193,129 @@ function renderRenewals(){
     </div>`;
   }).filter(Boolean).join('');
   return html || '<div class="empty"><p>Nenhum contrato com renovação pendente.</p></div>';
+}
+
+/* ═══════════════════════════════════════════
+   NEW CONTRACT MODAL
+═══════════════════════════════════════════ */
+
+function openNewContractModal(){
+  document.getElementById('nc-overlay').classList.add('open');
+  setTimeout(function(){ document.getElementById('nc-supplier').focus(); }, 80);
+}
+
+function closeNewContractModal(){
+  document.getElementById('nc-overlay').classList.remove('open');
+  resetNewContractForm();
+}
+
+function ncOverlayClick(e){
+  if(e.target===document.getElementById('nc-overlay')) closeNewContractModal();
+}
+
+function ncToggleRegistration(){
+  const show = document.getElementById('nc-new-supplier').checked;
+  document.getElementById('nc-registration-wrap').style.display = show ? '' : 'none';
+  if(!show) document.getElementById('nc-registration-required').checked = false;
+}
+
+function resetNewContractForm(){
+  const textIds = ['nc-supplier','nc-service','nc-area','nc-business-owner','nc-internal-owner',
+    'nc-contract-value','nc-contract-end','nc-next-action','nc-action-owner',
+    'nc-action-date','nc-dependency','nc-notes'];
+  textIds.forEach(function(id){ const el=document.getElementById(id); if(el) el.value=''; });
+  ['nc-international','nc-new-supplier','nc-contract-required','nc-registration-required'].forEach(function(id){
+    const el=document.getElementById(id); if(el) el.checked=false;
+  });
+  document.getElementById('nc-contract-type').value  = 'novo_contrato';
+  document.getElementById('nc-hom-status').value     = 'nao_iniciada';
+  document.getElementById('nc-contract-status').value= 'nao_necessario';
+  document.getElementById('nc-currency').value       = 'BRL';
+  document.getElementById('nc-macro').value          = 'homologacao';
+  document.getElementById('nc-priority').value       = 'media';
+  document.getElementById('nc-registration-wrap').style.display = 'none';
+  document.getElementById('nc-err').textContent = '';
+  const btn = document.getElementById('nc-save-btn');
+  btn.disabled = false;
+  btn.textContent = 'Salvar';
+}
+
+function submitNewContract(){
+  const sup        = document.getElementById('nc-supplier').value.trim();
+  const svc        = document.getElementById('nc-service').value.trim();
+  const area       = document.getElementById('nc-area').value.trim();
+  const nextAction = document.getElementById('nc-next-action').value.trim();
+  const macro      = document.getElementById('nc-macro').value;
+  const errEl      = document.getElementById('nc-err');
+
+  if(!sup)        { errEl.textContent='Fornecedor é obrigatório.'; return; }
+  if(!svc)        { errEl.textContent='Serviço é obrigatório.'; return; }
+  if(!area)       { errEl.textContent='Área é obrigatória.'; return; }
+  if(!nextAction) { errEl.textContent='Próxima Ação é obrigatória.'; return; }
+  errEl.textContent = '';
+
+  const rawValue = document.getElementById('nc-contract-value').value;
+  const data = {
+    supplier:                     sup,
+    service:                      svc,
+    businessArea:                 area,
+    businessOwner:                document.getElementById('nc-business-owner').value.trim(),
+    internalOwner:                document.getElementById('nc-internal-owner').value.trim(),
+    contractType:                 document.getElementById('nc-contract-type').value,
+    internationalSupplier:        document.getElementById('nc-international').checked,
+    newSupplier:                  document.getElementById('nc-new-supplier').checked,
+    homologationStatus:           document.getElementById('nc-hom-status').value,
+    contractRequired:             document.getElementById('nc-contract-required').checked,
+    contractStatus:               document.getElementById('nc-contract-status').value,
+    contractEndDate:              document.getElementById('nc-contract-end').value || null,
+    contractValue:                rawValue !== '' ? parseFloat(rawValue) : null,
+    currency:                     document.getElementById('nc-currency').value,
+    supplierRegistrationRequired: document.getElementById('nc-registration-required').checked,
+    macroStage:                   macro,
+    nextAction:                   nextAction,
+    actionOwner:                  document.getElementById('nc-action-owner').value.trim(),
+    nextActionDate:               document.getElementById('nc-action-date').value || null,
+    dependency:                   document.getElementById('nc-dependency').value.trim() || null,
+    priority:                     document.getElementById('nc-priority').value,
+    notes:                        document.getElementById('nc-notes').value.trim(),
+  };
+
+  const btn = document.getElementById('nc-save-btn');
+  btn.disabled = true;
+  btn.textContent = 'Salvando…';
+
+  const IS_GAS = typeof google!=='undefined' && google.script && google.script.run;
+  if(!IS_GAS){
+    errEl.textContent = 'Escrita disponível apenas no ambiente Google Apps Script.';
+    btn.disabled = false;
+    btn.textContent = 'Salvar';
+    return;
+  }
+
+  google.script.run
+    .withSuccessHandler(function(result){
+      if(result && result.error){
+        errEl.textContent = result.error;
+        btn.disabled = false;
+        btn.textContent = 'Salvar';
+        return;
+      }
+      closeNewContractModal();
+      showLoadingState();
+      google.script.run
+        .withSuccessHandler(function(records){
+          if(Array.isArray(records)&&records.length>0) loadRecords(records);
+          else showEmptyState();
+        })
+        .withFailureHandler(function(e){ showErrorState(e); })
+        .getData();
+    })
+    .withFailureHandler(function(e){
+      errEl.textContent = 'Erro ao salvar: ' + String(e);
+      btn.disabled = false;
+      btn.textContent = 'Salvar';
+    })
+    .createContract(data);
 }
 
 /* ═══════════════════════════════════════════
