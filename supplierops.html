@@ -421,7 +421,7 @@ details.dwr-sec[open] summary{border-bottom:1px solid var(--border);background:v
 /* ═══════════════════════════════════════════
    DATA — 17 registros de teste
 ═══════════════════════════════════════════ */
-const RECORDS = [
+let RECORDS = [
 {
   id:1, supplier:'Accenture Brasil', service:'Consultoria de Transformação Digital',
   businessArea:'Tecnologia', businessOwner:'Carlos Mendes', internalOwner:'Ana Lima',
@@ -1997,18 +1997,49 @@ function renderRenewals(){
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
-(function init(){
-  // Update sidebar badges
+
+function updateBadges(){
   const K = kpis();
   const bov = document.getElementById('badge-overview');
   const bbl = document.getElementById('badge-billing');
   const brn = document.getElementById('badge-renewals');
-  if(K.urgentActions > 0) bov.textContent = K.urgentActions;
-  else bov.style.display = 'none';
-  if(K.billingPend > 0) bbl.textContent = K.billingPend;
-  else bbl.style.display = 'none';
-  if(K.renewalsAlerts > 0) brn.textContent = K.renewalsAlerts;
-  else brn.style.display = 'none';
+  if(bov){ if(K.urgentActions>0){bov.textContent=K.urgentActions;bov.style.display='';}else{bov.style.display='none';} }
+  if(bbl){ if(K.billingPend>0){bbl.textContent=K.billingPend;bbl.style.display='';}else{bbl.style.display='none';} }
+  if(brn){ if(K.renewalsAlerts>0){brn.textContent=K.renewalsAlerts;brn.style.display='';}else{brn.style.display='none';} }
+}
+
+function loadRecords(records){
+  if(!Array.isArray(records)||records.length===0){
+    console.warn('loadRecords: dados inválidos ou vazios, mantendo fonte atual.');
+    return;
+  }
+  RECORDS = records;
+  updateBadges();
   render();
+}
+
+function initApp(){
+  const IS_GAS = typeof google!=='undefined'
+    && typeof google.script!=='undefined'
+    && typeof google.script.run!=='undefined';
+  if(!IS_GAS) return; // local: RECORDS fictícios já estão ativos
+  google.script.run
+    .withSuccessHandler(function(records){
+      if(Array.isArray(records)&&records.length>0){
+        loadRecords(records);
+      } else {
+        console.warn('Apps Script retornou dados vazios. Mantendo dados fictícios.');
+      }
+    })
+    .withFailureHandler(function(err){
+      console.error('Erro ao carregar dados do Sheets:', err, '— usando dados fictícios.');
+    })
+    .getData();
+}
+
+(function(){
+  updateBadges();
+  render();
+  initApp();
 })();
 </script>
