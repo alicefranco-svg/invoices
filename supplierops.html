@@ -271,6 +271,79 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
 .rgh-title{font-size:13px;font-weight:650;flex:1}
 .rgh-title.red{color:var(--red-txt)}.rgh-title.orange{color:var(--orange-txt)}.rgh-title.yellow{color:var(--yellow-txt)}.rgh-title.gray{color:var(--gray-txt)}
 .rgh-count{font-size:12px;font-weight:600;color:var(--text-2)}
+
+/* ─── DRAWER DETAIL (Etapa 4) ────────────── */
+details.dwr-sec{border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;margin-bottom:8px}
+details.dwr-sec summary{display:flex;align-items:center;gap:7px;padding:10px 14px;cursor:pointer;user-select:none;font-size:12.5px;font-weight:650;color:var(--text-1);background:var(--surface-2);list-style:none}
+details.dwr-sec summary::-webkit-details-marker{display:none}
+details.dwr-sec summary::after{content:'›';font-size:15px;color:var(--text-3);transition:transform .15s;display:inline-block;margin-left:auto;font-weight:300;line-height:1}
+details.dwr-sec[open] summary::after{transform:rotate(90deg)}
+details.dwr-sec summary:hover{background:var(--border)}
+details.dwr-sec[open] summary{border-bottom:1px solid var(--border);background:var(--surface)}
+.dwr-sec-icon{font-size:13px;width:18px;text-align:center;flex-shrink:0}
+.dwr-sec-body{padding:14px 16px}
+.dl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px}
+.dl-gi{}.dl-glabel{font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
+.dl-gval{font-size:12.5px;color:var(--text-1);word-break:break-word}
+.dl-gval.span2{grid-column:1/-1}
+.dl-row{display:flex;gap:8px;margin-bottom:8px}.dl-row:last-child{margin-bottom:0}
+.dl-label{font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;min-width:110px;flex-shrink:0;padding-top:2px}
+.dl-val{font-size:12.5px;color:var(--text-1)}
+
+/* next action box */
+.nxt-box{background:var(--accent-soft);border:1.5px solid var(--accent-border);border-radius:var(--r-lg);padding:14px 16px;margin-bottom:14px}
+.nxt-eyebrow{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:8px}
+.nxt-text{font-size:15px;font-weight:650;color:var(--text-1);line-height:1.4;margin-bottom:12px;letter-spacing:-.01em}
+.nxt-meta{display:flex;gap:0;flex-wrap:wrap;border-top:1px solid var(--accent-border);padding-top:10px}
+.nxt-mi{flex:1;min-width:100px;padding-right:12px}
+.nxt-mi-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);opacity:.7;margin-bottom:4px}
+.nxt-mi-val{font-size:12.5px;font-weight:500;color:var(--text-1)}
+.nxt-mi-val.overdue{color:var(--red);font-weight:650}
+.dep-box{margin-top:10px;padding:8px 12px;background:var(--yellow-bg);border:1px solid var(--yellow-bd);border-radius:var(--r-md);font-size:12px;color:var(--yellow-txt);display:flex;gap:7px;align-items:center}
+
+/* checklist */
+.chk-list{border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;margin-top:12px}
+.chk-item{display:flex;align-items:center;gap:9px;padding:8px 12px;border-bottom:1px solid var(--border);transition:background .08s}
+.chk-item:last-child{border-bottom:none}
+.chk-item:hover{background:var(--surface-2)}
+.chk-icon{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;font-weight:700;line-height:1}
+.ci-ok{background:var(--green-bg);color:var(--green);border:1.5px solid var(--green-bd)}
+.ci-pend{background:var(--yellow-bg);color:var(--yellow);border:1.5px solid var(--yellow-bd)}
+.ci-err{background:var(--red-bg);color:var(--red);border:1.5px solid var(--red-bd)}
+.ci-na{background:var(--gray-bg);color:var(--text-3);border:1.5px solid var(--gray-bd)}
+.chk-label{font-size:12.5px;color:var(--text-2);flex:1}
+.chk-label.done{color:var(--green-txt)}.chk-label.err{color:var(--red-txt)}
+
+/* info boxes (invoice / PO / portal / MIGO) */
+.info-box{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 14px;margin-bottom:10px}
+.info-box:last-child{margin-bottom:0}
+.info-box-lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin-bottom:9px;display:flex;align-items:center;gap:6px}
+
+/* timeline */
+.timeline{position:relative;padding-left:22px}
+.timeline::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--border);border-radius:1px}
+.tl-item{position:relative;padding-bottom:14px}
+.tl-item:last-child{padding-bottom:0}
+.tl-dot{position:absolute;left:-20px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--border-strong);border:2px solid var(--surface)}
+.tl-dot.done{background:var(--green);border-color:var(--green-bg)}
+.tl-dot.future{background:var(--accent);border-color:var(--accent-soft)}
+.tl-dot.overdue{background:var(--red);border-color:var(--red-bg)}
+.tl-date{font-size:10.5px;color:var(--text-3);font-variant-numeric:tabular-nums;margin-bottom:2px}
+.tl-label{font-size:12.5px;color:var(--text-1);font-weight:500;line-height:1.3}
+.tl-label.overdue{color:var(--red)}
+.tl-label.future{color:var(--text-2)}
+
+/* communication history */
+.comm-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.comm-item:last-child{border-bottom:none;padding-bottom:0}
+.comm-date-col{font-size:11px;color:var(--text-3);width:58px;flex-shrink:0;padding-top:2px;font-variant-numeric:tabular-nums}
+.comm-type-chip{display:inline-flex;align-items:center;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:3px;background:var(--accent-soft);color:var(--accent);margin-bottom:5px;border:1px solid var(--accent-border)}
+.comm-type-chip.email{background:var(--blue-bg);color:var(--blue-txt);border-color:var(--blue-bd)}
+.comm-type-chip.reuniao{background:var(--green-bg);color:var(--green-txt);border-color:var(--green-bd)}
+.comm-type-chip.telefone{background:var(--yellow-bg);color:var(--yellow-txt);border-color:var(--yellow-bd)}
+.comm-summary{font-size:12.5px;color:var(--text-1);line-height:1.5}
+
+.sec-sep{height:1px;background:var(--border);margin:14px 0}
 </style>
 
 <!-- ───────────────── APP SHELL ───────────────── -->
@@ -906,7 +979,8 @@ const PRIORITY_ORDER = {urgente:0,alta:1,media:2,baixa:3};
 /* ═══════════════════════════════════════════
    UTILITIES
 ═══════════════════════════════════════════ */
-const TODAY = new Date('2026-08-31T12:00:00');
+const _now = new Date();
+const TODAY = new Date(_now.getFullYear(), _now.getMonth(), _now.getDate(), 12, 0, 0);
 
 function pd(s){ return s ? new Date(s+'T12:00:00') : null; }
 function daysFromToday(s){
@@ -927,6 +1001,16 @@ function fmtShort(s){
 function fmtCur(v,c){
   if(v==null) return '—';
   return new Intl.NumberFormat('pt-BR',{style:'currency',currency:c||'BRL',minimumFractionDigits:0,maximumFractionDigits:0}).format(v);
+}
+function groupByCur(arr,valFn){
+  const m={};
+  arr.forEach(r=>{const c=r.currency||'BRL';m[c]=(m[c]||0)+(valFn(r)||0);});
+  return m;
+}
+function fmtByCur(byCur){
+  const parts=Object.entries(byCur).filter(([,v])=>v>0).map(([c,v])=>fmtCur(v,c));
+  if(!parts.length) return {main:'—',sub:''};
+  return {main:parts[0], sub:parts.length>1?'+ '+parts.slice(1).join(' + '):''};
 }
 function badge(k){
   return `<span class="badge ${STATUS_CLS[k]||'badge-gray'}">${STATUS_LABELS[k]||k}</span>`;
@@ -979,7 +1063,7 @@ function enrich(r){
     case 'faturamento':
       if(r.migoRequired && r.migoStatus==='migo_pendente') e.currStatus='migo_pendente';
       else if(r.invoicePortalStatus==='portal_pendente') e.currStatus='portal_pendente';
-      else if(r.poRequired && r.poStatus==='po_pendente') e.currStatus='po_pendente';
+      else if(r.poRequired && (r.poStatus==='po_pendente'||r.poStatus==='po_solicitado')) e.currStatus=r.poStatus;
       else if(r.invoiceReceived) e.currStatus='invoice_recebida';
       else e.currStatus='aguardando_invoice';
       break;
@@ -1076,39 +1160,281 @@ function render(){
 /* ═══════════════════════════════════════════
    DRAWER
 ═══════════════════════════════════════════ */
+function chkItem(done, err, na, label){
+  let cls, icon, lcls;
+  if(err&&!done){cls='ci-err';icon='✕';lcls='err';}
+  else if(done){cls='ci-ok';icon='✓';lcls='done';}
+  else if(na){cls='ci-na';icon='—';lcls='';}
+  else{cls='ci-pend';icon='○';lcls='';}
+  return `<div class="chk-item"><div class="chk-icon ${cls}">${icon}</div><span class="chk-label ${lcls}">${label}</span></div>`;
+}
+function gi(label,val,span){
+  return `<div class="dl-gi${span?' style="grid-column:1/-1"':''}"><div class="dl-glabel">${label}</div><div class="dl-gval">${val}</div></div>`;
+}
+function infoBox(label,icon,rows){
+  return `<div class="info-box"><div class="info-box-lbl">${icon?'<span>'+icon+'</span> ':''}<span>${label}</span></div><div class="dl-grid">${rows}</div></div>`;
+}
+
 function openDrawer(id){
   const r = enrich(RECORDS.find(x=>x.id===id));
   if(!r) return;
   document.getElementById('dwr-sup').textContent = r.supplier;
   document.getElementById('dwr-svc').textContent = r.service;
   document.getElementById('dwr-meta').innerHTML =
-    sbadge(r.macroStage) +
-    badge(r.currStatus||r.homologationStatus) +
-    pbadge(r.priority);
-  document.getElementById('dwr-body').innerHTML = `
-    <p style="font-size:13px;color:var(--text-2);line-height:1.6">
-      Drawer de detalhe completo com checklist por etapa, timeline, histórico de comunicação e próxima ação será entregue na <strong>Etapa 4</strong>.
-    </p>
-    <div style="margin-top:16px;padding:12px 14px;background:var(--accent-soft);border:1px solid var(--accent-border);border-radius:var(--r-lg)">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:6px">Próxima Ação</div>
-      <div style="font-size:14px;font-weight:600;color:var(--text-1);margin-bottom:8px">${esc(r.nextAction)}</div>
-      <div style="display:flex;gap:20px;flex-wrap:wrap">
-        <div><div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Responsável</div><div style="font-size:12.5px;font-weight:500;margin-top:2px">${esc(r.actionOwner)}</div></div>
-        <div><div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Prazo</div><div style="font-size:12.5px;font-weight:500;margin-top:2px${r.actionOverdue?';color:var(--red)':''}">${fmtDate(r.nextActionDate)}${r.actionOverdue?' ⚠':''}</div></div>
-        <div><div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em">Prioridade</div><div style="margin-top:2px">${pbadge(r.priority)}</div></div>
+    sbadge(r.macroStage) + badge(r.currStatus||r.homologationStatus) + pbadge(r.priority);
+
+  /* ── 1. PRÓXIMA AÇÃO ─────────────────── */
+  const dl = r.nextActionDate ? daysFromToday(r.nextActionDate) : null;
+  const dlTxt = dl !== null
+    ? (dl < 0 ? `${Math.abs(dl)} dias em atraso` : dl === 0 ? 'Hoje' : `${fmtDate(r.nextActionDate)} (${dl}d)`)
+    : fmtDate(r.nextActionDate) || '—';
+  const nxt = `<div class="nxt-box">
+    <div class="nxt-eyebrow">⚡ Próxima Ação</div>
+    <div class="nxt-text">${esc(r.nextAction||'—')}</div>
+    <div class="nxt-meta">
+      <div class="nxt-mi"><div class="nxt-mi-lbl">Responsável</div><div class="nxt-mi-val">${esc(r.actionOwner||'—')}</div></div>
+      <div class="nxt-mi"><div class="nxt-mi-lbl">Prazo</div><div class="nxt-mi-val${r.actionOverdue?' overdue':''}">${dlTxt}</div></div>
+      <div class="nxt-mi"><div class="nxt-mi-lbl">Prioridade</div><div class="nxt-mi-val">${pbadge(r.priority)}</div></div>
+    </div>
+    ${r.dependency?`<div class="dep-box"><span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:.7">Depende de:</span> ${esc(r.dependency)}</div>`:''}
+  </div>`;
+
+  /* ── 2. INFORMAÇÕES GERAIS ───────────── */
+  const infoSec = `<details class="dwr-sec" open>
+    <summary><span class="dwr-sec-icon">ℹ</span>Informações Gerais</summary>
+    <div class="dwr-sec-body">
+      <div class="dl-grid">
+        ${gi('Área de Negócio',esc(r.businessArea||'—'))}
+        ${gi('Responsável (Negócio)',esc(r.businessOwner||'—'))}
+        ${gi('Responsável (Interno)',esc(r.internalOwner||'—'))}
+        ${gi('Tipo de Contratação',CONTRACT_TYPE_LABELS[r.contractType]||r.contractType||'—')}
+        ${gi('Fornecedor Internacional',r.internationalSupplier?'Sim':'Não')}
+        ${gi('Novo Fornecedor',r.newSupplier?'Sim':'Não')}
+        ${r.notes?gi('Observações',esc(r.notes),true):''}
       </div>
     </div>
-    ${r.notes?`<div style="margin-top:14px;padding:10px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-md)"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:5px">Observações</div><div style="font-size:12.5px;color:var(--text-2)">${esc(r.notes)}</div></div>`:''}
-    <div style="margin-top:16px">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:10px">Histórico de Comunicação</div>
-      ${(r.communicationHistory||[]).map(c=>`
-        <div style="display:flex;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:12px">
-          <div style="font-size:11px;color:var(--text-3);width:56px;flex-shrink:0;padding-top:1px">${fmtShort(c.date)}</div>
-          <div><div style="display:inline-block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:1px 7px;border-radius:3px;background:var(--accent-soft);color:var(--accent);margin-bottom:5px">${esc(c.type)}</div><div style="font-size:12.5px;color:var(--text-1)">${esc(c.summary)}</div></div>
-        </div>
-      `).join('')}
+  </details>`;
+
+  /* ── 3. HOMOLOGAÇÃO ──────────────────── */
+  const isHomo = r.macroStage==='homologacao';
+  const hDone = s => ['homologacao_concluida','aprovada'].includes(s);
+  const homoChk = `<div class="chk-list">
+    ${chkItem(r.homologationStatus!=='aguardando_documentos'&&r.homologationStatus!=='nao_iniciada'&&r.homologationStatus!=='nao_iniciado', false, r.homologationStatus==='nao_iniciada'||r.homologationStatus==='nao_iniciado', 'Documentação recebida')}
+    ${chkItem(r.homologationStatus==='em_analise'||hDone(r.homologationStatus), false, !['em_analise','homologacao_concluida','aprovada','bloqueada','reprovada'].includes(r.homologationStatus), 'Análise interna iniciada')}
+    ${chkItem(hDone(r.homologationStatus), r.homologationStatus==='bloqueada'||r.homologationStatus==='reprovada', !hDone(r.homologationStatus)&&r.homologationStatus!=='bloqueada'&&r.homologationStatus!=='reprovada', 'Homologação aprovada')}
+  </div>`;
+  const homoSec = `<details class="dwr-sec" ${isHomo?'open':''}>
+    <summary><span class="dwr-sec-icon">🔍</span>Homologação</summary>
+    <div class="dwr-sec-body">
+      <div class="dl-grid" style="margin-bottom:12px">
+        ${gi('Status',badge(r.homologationStatus))}
+        ${gi('Início',fmtDate(r.homologationStartDate))}
+        ${gi('Conclusão',fmtDate(r.homologationEndDate))}
+      </div>
+      ${homoChk}
     </div>
-  `;
+  </details>`;
+
+  /* ── 4. CADASTRO DE FORNECEDOR (condicional) ── */
+  let cadSec = '';
+  if(r.supplierRegistrationRequired){
+    const cadChk = `<div class="chk-list">
+      ${chkItem(r.supplierRegistrationStatus!=='nao_iniciado', false, false, 'Cadastro iniciado')}
+      ${chkItem(r.supplierRegistrationStatus==='cadastro_em_andamento'||r.supplierRegistrationStatus==='cadastro_concluido', false, r.supplierRegistrationStatus==='nao_iniciado', 'Cadastro em andamento')}
+      ${chkItem(r.supplierRegistrationStatus==='cadastro_concluido', false, r.supplierRegistrationStatus!=='cadastro_concluido', 'Cadastro concluído')}
+      ${chkItem(!!r.supplierCode, false, !r.supplierCode, 'Código de fornecedor gerado')}
+    </div>`;
+    cadSec = `<details class="dwr-sec" ${r.macroStage==='contratacao'&&r.currStatus===r.supplierRegistrationStatus?'open':''}>
+      <summary><span class="dwr-sec-icon">🏢</span>Cadastro de Fornecedor</summary>
+      <div class="dwr-sec-body">
+        <div class="dl-grid" style="margin-bottom:12px">
+          ${gi('Status',badge(r.supplierRegistrationStatus))}
+          ${gi('Código',r.supplierCode?`<span class="font-mono">${esc(r.supplierCode)}</span>`:'—')}
+        </div>
+        ${cadChk}
+      </div>
+    </details>`;
+  }
+
+  /* ── 5. CONTRATO (condicional) ───────── */
+  let contSec = '';
+  if(r.contractRequired){
+    const contOpen = ['contratacao','prestacao_servico','faturamento','pagamento'].includes(r.macroStage);
+    const exDays = r.contractEndDate ? daysFromToday(r.contractEndDate) : null;
+    const exStyle = exDays!==null&&exDays<=30?'color:var(--red);font-weight:650':exDays!==null&&exDays<=60?'color:var(--orange)':'';
+    const exTxt = r.contractEndDate ? `<span${exStyle?` style="${exStyle}"`:''}>` + fmtDate(r.contractEndDate) + (exDays!==null?` <span style="font-size:11px">(${exDays}d)</span>`:'')+`</span>` : '—';
+    const contChk = `<div class="chk-list">
+      ${chkItem(!!r.contractRequestedDate, false, false, 'Contrato solicitado ao jurídico')}
+      ${chkItem(!!r.contractSentDate, false, !r.contractRequestedDate, 'Minuta enviada para revisão')}
+      ${chkItem(!!r.signatureSentDate, false, !r.contractSentDate, 'Assinatura enviada ao fornecedor')}
+      ${chkItem(!!r.signatureDate, r.contractStatus==='bloqueado', !r.signatureSentDate, 'Contrato assinado por ambas as partes')}
+    </div>`;
+    contSec = `<details class="dwr-sec" ${contOpen?'open':''}>
+      <summary><span class="dwr-sec-icon">📄</span>Contrato</summary>
+      <div class="dwr-sec-body">
+        <div class="dl-grid" style="margin-bottom:12px">
+          ${gi('Tipo',CONTRACT_TYPE_LABELS[r.contractType]||r.contractType||'—')}
+          ${gi('Status',badge(r.contractStatus))}
+          ${gi('Solicitado em',fmtDate(r.contractRequestedDate))}
+          ${gi('Enviado em',fmtDate(r.contractSentDate))}
+          ${gi('Assinatura enviada',fmtDate(r.signatureSentDate))}
+          ${gi('Assinado em',fmtDate(r.signatureDate))}
+          ${gi('Vencimento',exTxt)}
+          ${gi('Auto-renovação',r.autoRenewal?'<span class="badge badge-green">Sim</span>':'<span class="badge badge-gray">Manual</span>')}
+          ${r.renewalNoticeDays?gi('Aviso de renovação',r.renewalNoticeDays+' dias antes'):''}
+          ${gi('Valor Contratado',r.contractValue?`<span class="font-mono">${fmtCur(r.contractValue,r.currency||'BRL')}</span>`:'—')}
+          ${r.renewalStatus?gi('Status Renovação',badge(r.renewalStatus)):''}
+        </div>
+        ${contChk}
+      </div>
+    </details>`;
+  }
+
+  /* ── 6. PRESTAÇÃO DO SERVIÇO ─────────── */
+  const isSvc = r.macroStage==='prestacao_servico';
+  const svcChk = `<div class="chk-list">
+    ${chkItem(!!r.serviceStartDate&&r.serviceStatus!=='nao_iniciado', false, !r.serviceStartDate&&r.serviceStatus==='nao_iniciado', 'Serviço iniciado')}
+    ${chkItem(r.serviceStatus==='em_andamento'||r.serviceStatus==='recorrente'||r.serviceStatus==='concluido', false, r.serviceStatus==='nao_iniciado', 'Serviço em andamento')}
+    ${chkItem(r.serviceStatus==='concluido', false, r.serviceStatus!=='concluido'&&r.serviceStatus!=='em_andamento'&&r.serviceStatus!=='recorrente', 'Serviço concluído / entrega aceita')}
+  </div>`;
+  const svcSec = `<details class="dwr-sec" ${isSvc?'open':''}>
+    <summary><span class="dwr-sec-icon">⚙</span>Prestação do Serviço</summary>
+    <div class="dwr-sec-body">
+      <div class="dl-grid" style="margin-bottom:12px">
+        ${gi('Status',badge(r.serviceStatus))}
+        ${gi('Início',fmtDate(r.serviceStartDate))}
+        ${gi('Término previsto',fmtDate(r.serviceEndDate))}
+        ${gi('Recorrente',r.recurringService?'Sim'+(r.recurringPeriodicity?' — '+r.recurringPeriodicity:''):'Não')}
+      </div>
+      ${svcChk}
+    </div>
+  </details>`;
+
+  /* ── 7. FATURAMENTO ──────────────────── */
+  const isFat = ['faturamento','pagamento'].includes(r.macroStage);
+  const fatChkItems = [];
+  if(r.invoiceExpected) fatChkItems.push(chkItem(!!r.invoiceReceived, false, false, 'Invoice aguardada do fornecedor'));
+  fatChkItems.push(chkItem(!!r.invoiceReceived, false, !r.invoiceExpected&&!r.invoiceReceived, 'Invoice recebida e validada'));
+  if(r.poRequired) fatChkItems.push(chkItem(r.poStatus==='po_emitido', false, !r.invoiceReceived, 'PO emitido'+(r.poNumber?' ('+r.poNumber+')':'')));
+  if(r.invoicePortalStatus&&r.invoicePortalStatus!=='nao_aplicavel') fatChkItems.push(chkItem(r.invoicePortalStatus==='invoice_no_portal', false, !r.invoiceReceived, 'Invoice enviada ao portal'));
+  if(r.migoRequired) fatChkItems.push(chkItem(r.migoStatus==='migo_concluido', false, r.poRequired&&r.poStatus!=='po_emitido', 'MIGO / confirmação de recebimento'));
+  const invBox = (r.invoiceReceived||r.invoiceExpected)?infoBox('Nota Fiscal / Invoice','🧾',
+    gi('Status',r.invoiceReceived?'<span class="badge badge-green">Recebida</span>':'<span class="badge badge-yellow">Aguardada</span>')+
+    (r.invoiceNumber?gi('Número NF',`<span class="font-mono">${esc(r.invoiceNumber)}</span>`):'') +
+    (r.invoiceDate?gi('Data',fmtDate(r.invoiceDate)):'') +
+    (r.invoiceValue?gi('Valor',`<span class="font-mono">${fmtCur(r.invoiceValue,r.currency||'BRL')}${r.currency&&r.currency!=='BRL'?' ('+r.currency+')':''}</span>`):'')
+  ):'';
+  const poBox = r.poRequired?infoBox('Purchase Order (PO)','📋',
+    gi('Status',badge(r.poStatus))+
+    (r.poNumber?gi('Número PO',`<span class="font-mono">${esc(r.poNumber)}</span>`):'') +
+    (r.poRequestDate?gi('Solicitado em',fmtDate(r.poRequestDate)):'') +
+    (r.poIssueDate?gi('Emitido em',fmtDate(r.poIssueDate)):'')
+  ):'';
+  const portalBox = (r.invoicePortalStatus&&r.invoicePortalStatus!=='nao_aplicavel')?infoBox('Portal de Invoice','🌐',
+    gi('Status',badge(r.invoicePortalStatus))+
+    (r.invoicePortalDate?gi('Data de envio',fmtDate(r.invoicePortalDate)):'')
+  ):'';
+  const migoBox = r.migoRequired?infoBox('MIGO / Confirmação de Recebimento','✅',
+    gi('Status',badge(r.migoStatus))+
+    (r.migoDate?gi('Data confirmação',fmtDate(r.migoDate)):'')
+  ):'';
+  const fatSec = `<details class="dwr-sec" ${isFat?'open':''}>
+    <summary><span class="dwr-sec-icon">🧾</span>Faturamento</summary>
+    <div class="dwr-sec-body">
+      <div class="chk-list">${fatChkItems.join('')}</div>
+      <div style="margin-top:12px">${invBox}${poBox}${portalBox}${migoBox}</div>
+    </div>
+  </details>`;
+
+  /* ── 8. PAGAMENTO ────────────────────── */
+  const isPgmt = r.macroStage==='pagamento';
+  const pgDays = r.expectedPaymentDate ? daysFromToday(r.expectedPaymentDate) : null;
+  const pgStyle = r.paymentOverdue?'color:var(--red);font-weight:650':pgDays!==null&&pgDays<=7?'color:var(--yellow)':'';
+  const pgDateTxt = r.expectedPaymentDate
+    ? `<span${pgStyle?` style="${pgStyle}"`:''}>${fmtDate(r.expectedPaymentDate)}${pgDays!==null&&r.paymentStatus!=='pago'?` <span style="font-size:11px">(${pgDays<0?Math.abs(pgDays)+'d atraso':pgDays+'d'})</span>`:''}</span>`
+    : '—';
+  const pgmtChk = `<div class="chk-list">
+    ${chkItem(!!r.invoiceReceived, false, !r.invoiceExpected&&!r.invoiceReceived, 'Invoice recebida')}
+    ${chkItem(!!r.paymentRegistered, false, !r.invoiceReceived, 'Pagamento registrado no sistema')}
+    ${chkItem(r.paymentStatus==='pago', r.paymentOverdue, !r.paymentRegistered, 'Pagamento efetuado')}
+    ${chkItem(!!r.proofSentToSupplier, false, r.paymentStatus!=='pago', 'Comprovante enviado ao fornecedor')}
+  </div>`;
+  const pgmtSec = `<details class="dwr-sec" ${isPgmt?'open':''}>
+    <summary><span class="dwr-sec-icon">💳</span>Pagamento</summary>
+    <div class="dwr-sec-body">
+      <div class="dl-grid" style="margin-bottom:12px">
+        ${gi('Status',badge(r.paymentStatus))}
+        ${gi('Prazo contratual',r.paymentTermsDays?r.paymentTermsDays+' dias':'—')}
+        ${gi('Data prevista',pgDateTxt)}
+        ${gi('Data efetiva',fmtDate(r.actualPaymentDate))}
+        ${gi('Comprovante',r.proofOfPayment?'Gerado':'Pendente')}
+        ${gi('Enviado ao forn.',r.proofSentToSupplier?'<span class="badge badge-green">Sim</span>':'<span class="badge badge-gray">Não</span>')}
+      </div>
+      ${pgmtChk}
+    </div>
+  </details>`;
+
+  /* ── 9. TIMELINE ─────────────────────── */
+  const tlEvts = [
+    {d:r.homologationStartDate, label:'Início da Homologação', done:true},
+    {d:r.homologationEndDate, label:'Homologação Concluída', done:true},
+    {d:r.contractRequestedDate, label:'Contrato Solicitado', done:true},
+    {d:r.contractSentDate, label:'Minuta Enviada para Revisão', done:true},
+    {d:r.signatureSentDate, label:'Assinatura Enviada ao Fornecedor', done:true},
+    {d:r.signatureDate, label:'Contrato Assinado', done:true},
+    {d:r.serviceStartDate, label:'Início do Serviço', done:true},
+    {d:r.invoiceDate, label:'Invoice Recebida', done:true},
+    {d:r.poRequestDate, label:'PO Solicitado', done:true},
+    {d:r.poIssueDate, label:'PO Emitido', done:true},
+    {d:r.invoicePortalDate, label:'Enviado ao Portal de Invoice', done:true},
+    {d:r.migoDate, label:'MIGO Confirmado', done:true},
+    {d:r.expectedPaymentDate, label:'Pagamento Previsto', done:r.paymentStatus==='pago', future:r.paymentStatus!=='pago', overdue:r.paymentOverdue},
+    {d:r.actualPaymentDate, label:'Pagamento Efetuado', done:true},
+    {d:r.serviceEndDate, label:'Término do Serviço', done:!!r.actualPaymentDate||r.serviceStatus==='concluido', future:r.serviceStatus!=='concluido'},
+    {d:r.contractEndDate, label:'Vencimento do Contrato', future:true, overdue:r.urgentExpiry},
+  ].filter(e=>e.d&&typeof e.d==='string')
+   .sort((a,b)=>{const da=pd(a.d),db=pd(b.d);return da&&db?da-db:0;});
+  const tlHtml = tlEvts.length ? tlEvts.map(e=>{
+    const past = pd(e.d)<=TODAY;
+    const dotCls = (e.overdue&&!e.done)?'overdue':((e.done&&past)?'done':((!past||e.future)?'future':''));
+    return `<div class="tl-item">
+      <div class="tl-dot ${dotCls}"></div>
+      <div class="tl-date">${fmtDate(e.d)}</div>
+      <div class="tl-label ${(e.overdue&&!e.done)?'overdue':((!past||e.future)&&e.d!==r.contractEndDate?'future':'')}">${e.label}</div>
+    </div>`;
+  }).join('') : '<p style="font-size:12px;color:var(--text-3)">Nenhum evento registrado ainda.</p>';
+  const tlSec = `<details class="dwr-sec">
+    <summary><span class="dwr-sec-icon">📅</span>Timeline do Processo</summary>
+    <div class="dwr-sec-body"><div class="timeline">${tlHtml}</div></div>
+  </details>`;
+
+  /* ── 10. COMUNICAÇÃO COM FORNECEDOR ─── */
+  const commHist = (r.communicationHistory||[]).slice().sort((a,b)=>{
+    const da=pd(a.date),db=pd(b.date); return da&&db?db-da:0;
+  }).map(c=>`<div class="comm-item">
+    <div class="comm-date-col">${fmtShort(c.date)}</div>
+    <div>
+      <div class="comm-type-chip ${c.type||''}">${esc(c.type||'—')}</div>
+      <div class="comm-summary">${esc(c.summary)}</div>
+    </div>
+  </div>`).join('');
+  const lastContactInfo = r.lastSupplierContact ? `<div class="dl-grid" style="margin-bottom:12px">
+    ${gi('Último contato',fmtDate(r.lastSupplierContact))}
+    ${gi('Próx. update',fmtDate(r.nextSupplierUpdateDate))}
+    ${r.lastSupplierContactSummary?gi('Resumo',esc(r.lastSupplierContactSummary),true):''}
+  </div>` : '';
+  const fuAlert = r.followUpRequired ? `<div style="margin-bottom:10px">${isOD(r.nextSupplierUpdateDate)?'<span class="badge badge-red">Follow-up em atraso</span>':'<span class="badge badge-yellow">Follow-up pendente</span>'}</div>` : '';
+  const commSec = `<details class="dwr-sec">
+    <summary><span class="dwr-sec-icon">💬</span>Comunicação com Fornecedor</summary>
+    <div class="dwr-sec-body">
+      ${lastContactInfo}${fuAlert}
+      ${commHist||'<p style="font-size:12px;color:var(--text-3)">Nenhum histórico registrado.</p>'}
+    </div>
+  </details>`;
+
+  document.getElementById('dwr-body').innerHTML =
+    nxt + infoSec + homoSec + cadSec + contSec + svcSec + fatSec + pgmtSec + tlSec + commSec;
+
   document.getElementById('overlay').classList.add('open');
   document.getElementById('drawer').classList.add('open');
 }
@@ -1285,19 +1611,25 @@ function renderOverviewLd(){
   const K = kpis();
   const E = RECORDS.map(enrich);
   const stageGroups = ['homologacao','contratacao','prestacao_servico','faturamento','pagamento'];
-  const totalValue = RECORDS.reduce((s,r)=>s+(r.contractValue||0),0);
-  const pendingValue = RECORDS.filter(r=>r.paymentStatus!=='pago').reduce((s,r)=>s+(r.invoiceValue||0),0);
-  const overdueValue = E.filter(e=>e.paymentOverdue||e.paymentStatus==='atrasado').reduce((s,r)=>s+(r.invoiceValue||0),0);
+  const contractedByCur = groupByCur(RECORDS, r=>r.contractValue);
+  const pendingByCur = groupByCur(RECORDS.filter(r=>r.paymentStatus!=='pago'), r=>r.invoiceValue);
+  const overdueByCur = groupByCur(E.filter(e=>e.paymentOverdue||e.paymentStatus==='atrasado'), r=>r.invoiceValue);
+  const contractedFmt = fmtByCur(contractedByCur);
+  const pendingFmt = fmtByCur(pendingByCur);
+  const overdueFmt = fmtByCur(overdueByCur);
+  const overdueAny = Object.values(overdueByCur).some(v=>v>0);
+  const activeContracts = E.filter(e=>e.contractRequired&&!!e.signatureDate&&e.contractEndDate&&daysFromToday(e.contractEndDate)>=0).length;
   const blockedCount = E.filter(r=>r.homologationStatus==='bloqueada'||r.contractStatus==='bloqueado'||r.paymentStatus==='atrasado').length;
   const counts = stageGroups.map(s=>RECORDS.filter(r=>r.macroStage===s).length);
   const maxCount = Math.max(...counts,1);
 
   return `
   <div class="leader-kpi-grid">
-    ${lkpi('Contratações Ativas', K.emAndamento, '')}
-    ${lkpi('Valor Total Contratado', fmtCur(totalValue,'BRL'), 'blue', 'em contratos ativos')}
-    ${lkpi('Valor Ag. Pagamento', fmtCur(pendingValue,'BRL'), K.pgmtosAtraso>0?'yellow':'', 'em invoices abertas')}
-    ${lkpi('Valor em Atraso', fmtCur(overdueValue,'BRL'), overdueValue>0?'red':'green', 'pagamentos não liquidados')}
+    ${lkpi('Processos em andamento', K.emAndamento, '')}
+    ${lkpi('Contratos Ativos', activeContracts, 'blue', 'com vigência ativa')}
+    ${lkpi('Valor Total Contratado', contractedFmt.main, 'blue', contractedFmt.sub||'em contratos')}
+    ${lkpi('Valor Ag. Pagamento', pendingFmt.main, K.pgmtosAtraso>0?'yellow':'', pendingFmt.sub||'em invoices abertas')}
+    ${lkpi('Valor em Atraso', overdueFmt.main, overdueAny?'red':'green', overdueFmt.sub||'pagamentos não liquidados')}
     ${lkpi('Contratos Bloqueados', blockedCount, blockedCount>0?'red':'green')}
     ${lkpi('Renovações Próximas', K.renovacoes, K.renovacoes>0?'yellow':'', 'nos próximos 90 dias')}
   </div>
@@ -1359,8 +1691,8 @@ function renderOverviewLd(){
   </div>`;
 }
 
-function kpi(label, val, cls){
-  return `<div class="kpi"><div class="kpi-label">${label}</div><div class="kpi-val ${cls}">${val}</div></div>`;
+function kpi(label, val, cls, sub=''){
+  return `<div class="kpi"><div class="kpi-label">${label}</div><div class="kpi-val ${cls}">${val}</div>${sub?`<div class="kpi-sub">${sub}</div>`:''}</div>`;
 }
 function lkpi(label, val, cls, sub=''){
   return `<div class="leader-kpi"><div class="lkpi-label">${label}</div><div class="lkpi-val ${cls}">${val}</div>${sub?`<div class="lkpi-sub">${sub}</div>`:''}</div>`;
@@ -1390,7 +1722,7 @@ function renderPipelineBoardHTML(allRecords){
     const cards = filtered.filter(r=>r.macroStage===stage);
     const label = MACRO_LABELS[stage];
     const dot = MACRO_DOTS[stage];
-    const totalVal = isLd ? cards.reduce((s,r)=>s+(r.contractValue||0),0) : 0;
+    const totalByCur = isLd ? groupByCur(cards, r=>r.contractValue) : {};
     const cardHTML = cards.map(r=>{
       const riskCls = r.risk||'gray';
       const dl = r.nextActionDate ? daysFromToday(r.nextActionDate) : null;
@@ -1417,7 +1749,7 @@ function renderPipelineBoardHTML(allRecords){
         <span class="kch-name">${label}</span>
         <span class="kch-count">${cards.length}</span>
       </div>
-      ${isLd && totalVal>0 ? `<div class="kch-sub">${fmtCur(totalVal,'BRL')}</div>` : ''}
+      ${isLd && Object.keys(totalByCur).length ? `<div class="kch-sub">${Object.entries(totalByCur).filter(([,v])=>v>0).map(([c,v])=>fmtCur(v,c)).join(' + ')}</div>` : ''}
       <div class="kanban-cards">${cardHTML || '<div style="padding:16px 12px;font-size:12px;color:var(--text-3);text-align:center">Nenhum contrato</div>'}</div>
     </div>`;
   }).join('');
@@ -1502,16 +1834,20 @@ function renderBilling(){
     if(da&&db) return da-db;
     return 0;
   });
-  const totalPend = billRecs.filter(r=>r.paymentStatus!=='pago').reduce((s,r)=>s+(r.invoiceValue||0),0);
-  const overdueVal = billRecs.filter(r=>r.paymentOverdue).reduce((s,r)=>s+(r.invoiceValue||0),0);
-  const next30Val = billRecs.filter(r=>{
+  const pendByCur = groupByCur(billRecs.filter(r=>r.paymentStatus!=='pago'), r=>r.invoiceValue);
+  const overdueBCur = groupByCur(billRecs.filter(r=>r.paymentOverdue), r=>r.invoiceValue);
+  const next30ByCur = groupByCur(billRecs.filter(r=>{
     if(r.paymentStatus==='pago') return false;
     const d=daysFromToday(r.expectedPaymentDate);
     return d!==null&&d>=0&&d<=30;
-  }).reduce((s,r)=>s+(r.invoiceValue||0),0);
-  const posPend = billRecs.filter(r=>r.poRequired&&r.poStatus!=='emitido'&&r.poStatus!=='n/a').length;
-  const migosPend = billRecs.filter(r=>r.migoRequired&&r.migoStatus!=='confirmado'&&r.migoStatus!=='n/a').length;
-  const portalPend = billRecs.filter(r=>r.invoicePortalStatus==='pendente'||r.invoicePortalStatus==='portal_pendente').length;
+  }), r=>r.invoiceValue);
+  const pendFmt = fmtByCur(pendByCur);
+  const overdueFmt = fmtByCur(overdueBCur);
+  const next30Fmt = fmtByCur(next30ByCur);
+  const overdueAny = Object.values(overdueBCur).some(v=>v>0);
+  const posPend = billRecs.filter(r=>r.poRequired&&r.poStatus!=='po_emitido'&&r.poStatus!=='nao_aplicavel').length;
+  const migosPend = billRecs.filter(r=>r.migoRequired&&r.migoStatus!=='migo_concluido'&&r.migoStatus!=='nao_aplicavel').length;
+  const portalPend = billRecs.filter(r=>r.invoicePortalStatus==='portal_pendente').length;
   const fmtMonth = ym=>{
     const [y,m] = ym.split('-');
     return ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'][parseInt(m)-1]+' '+y;
@@ -1524,9 +1860,9 @@ function renderBilling(){
   };
   const rows = filtered.map(r=>{
     const isOvd = r.paymentOverdue;
-    const poCond = !r.poRequired ? null : r.poStatus==='emitido'?'ok':'pend';
-    const migoCond = !r.migoRequired ? null : r.migoStatus==='confirmado'?'ok':'pend';
-    const portalCond = r.invoicePortalStatus==='enviado'?'ok':r.invoicePortalStatus==='pendente'||r.invoicePortalStatus==='portal_pendente'?'pend':null;
+    const poCond = !r.poRequired ? null : r.poStatus==='po_emitido'?'ok':'pend';
+    const migoCond = !r.migoRequired ? null : r.migoStatus==='migo_concluido'?'ok':'pend';
+    const portalCond = !r.invoicePortalStatus||r.invoicePortalStatus==='nao_aplicavel'?null:(r.invoicePortalStatus==='invoice_no_portal'?'ok':'pend');
     let payBadge;
     if(r.paymentStatus==='pago') payBadge='<span class="badge badge-green">Pago</span>';
     else if(r.paymentOverdue) payBadge='<span class="badge badge-red">Atrasado</span>';
@@ -1546,9 +1882,9 @@ function renderBilling(){
   }).join('');
   return `
     <div class="kpi-grid" style="margin-bottom:20px">
-      ${kpi('Valor Pendente', totalPend>0?fmtCur(totalPend,'BRL'):'—', totalPend>0?'yellow':'')}
-      ${kpi('Próx. 30 dias', next30Val>0?fmtCur(next30Val,'BRL'):'—', '')}
-      ${kpi('Em Atraso', overdueVal>0?fmtCur(overdueVal,'BRL'):'—', overdueVal>0?'red':'green')}
+      ${kpi('Valor Pendente', pendFmt.main, Object.keys(pendByCur).length?'yellow':'', pendFmt.sub)}
+      ${kpi('Próx. 30 dias', next30Fmt.main, '', next30Fmt.sub)}
+      ${kpi('Em Atraso', overdueFmt.main, overdueAny?'red':'green', overdueFmt.sub)}
       ${kpi('POs Pendentes', posPend, posPend>0?'yellow':'green')}
       ${kpi('MIGOs Pend.', migosPend, migosPend>0?'yellow':'green')}
       ${kpi('Portais Pend.', portalPend, portalPend>0?'yellow':'green')}
@@ -1590,16 +1926,18 @@ function renderRenewals(){
     r.renewalStatus!=='renovado' && r.renewalStatus!=='encerrado'
   );
   const GROUPS = [
-    {key:'u30', label:'Vence em até 30 dias',  cls:'rgh-red',    tcls:'red',    max:30},
-    {key:'u60', label:'Vence em 31–60 dias',    cls:'rgh-orange', tcls:'orange', max:60},
-    {key:'u90', label:'Vence em 61–90 dias',    cls:'rgh-yellow', tcls:'yellow', max:90},
-    {key:'far', label:'Vence em mais de 90 dias', cls:'rgh-gray', tcls:'gray',   max:Infinity},
+    {key:'expired', label:'Contrato vencido',         cls:'rgh-red',    tcls:'red'},
+    {key:'u30',     label:'Vence em até 30 dias',      cls:'rgh-orange', tcls:'orange'},
+    {key:'u60',     label:'Vence em 31–60 dias',       cls:'rgh-yellow', tcls:'yellow'},
+    {key:'u90',     label:'Vence em 61–90 dias',       cls:'rgh-gray',   tcls:'gray'},
+    {key:'far',     label:'Vence em mais de 90 dias',  cls:'rgh-gray',   tcls:'gray'},
   ];
   const grouped = {};
   GROUPS.forEach(g=>grouped[g.key]=[]);
   renewRecs.forEach(r=>{
     const d = daysFromToday(r.contractEndDate);
     if(d===null||d>90) grouped.far.push(r);
+    else if(d<0) grouped.expired.push(r);
     else if(d<=30) grouped.u30.push(r);
     else if(d<=60) grouped.u60.push(r);
     else grouped.u90.push(r);
@@ -1625,7 +1963,7 @@ function renderRenewals(){
       return `<tr onclick="openDrawer(${r.id})">
         <td><div class="td-sup">${esc(r.supplier)}</div><div class="td-svc">${esc(r.service)}</div></td>
         <td class="font-mono">${fmtDate(r.contractEndDate)||'—'}</td>
-        <td class="r font-mono" ${dayCls}>${days!==null?days+'d':'—'}</td>
+        <td class="r font-mono" ${dayCls}>${days===null?'—':days<0?`${Math.abs(days)}d atrás`:days+'d'}</td>
         <td>${r.autoRenewal?'<span class="badge badge-green">Auto</span>':'<span class="badge badge-gray">Manual</span>'}</td>
         <td>${ren}</td>
         <td class="r font-mono">${r.contractValue?fmtCur(r.contractValue,'BRL'):'—'}</td>
@@ -1645,7 +1983,7 @@ function renderRenewals(){
             <th class="r">Dias</th>
             <th>Renovação</th>
             <th>Status</th>
-            <th class="r">Valor Anual</th>
+            <th class="r">Valor Contratado</th>
             <th>Próxima Ação</th>
           </tr></thead>
           <tbody>${rows}</tbody>
