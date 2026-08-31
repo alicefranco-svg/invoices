@@ -2216,7 +2216,8 @@ function ncOverlayClick(e){
 function ncToggleRegistration(){
   const show = document.getElementById('nc-new-supplier').checked;
   document.getElementById('nc-registration-wrap').style.display = show ? '' : 'none';
-  if(!show) document.getElementById('nc-registration-required').checked = false;
+  if(show) document.getElementById('nc-registration-required').checked = true;
+  else document.getElementById('nc-registration-required').checked = false;
 }
 
 function resetNewContractForm(){
